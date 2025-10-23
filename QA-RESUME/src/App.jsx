@@ -44,52 +44,74 @@ const resume = {
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-white text-slate-900 p-8 print:p-0">
-      <div className="max-w-3xl mx-auto">
-        <header className="mb-4">
-          <h1 className="text-2xl font-bold leading-tight">{resume.name}</h1>
-          <p className="mt-1 text-sm">{resume.title} • {resume.location}</p>
-          <p className="mt-1 text-sm">{resume.email} • {resume.phone} • <a href={resume.linkedin}>{resume.linkedin.replace('https://','')}</a></p>
+    <div className="min-h-screen bg-white text-slate-900 px-8 py-12 print:p-0">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <header className="mb-8 border-b-2 border-slate-800 pb-4">
+          <h1 className="text-3xl font-bold text-slate-900">{resume.name}</h1>
+          <p className="mt-2 text-base text-slate-700">{resume.title} • {resume.location}</p>
+          <p className="mt-1 text-sm text-slate-600">
+            {resume.email} • {resume.phone} • 
+            <a href={resume.linkedin} className="text-blue-600 hover:underline ml-1">
+              {resume.linkedin.replace('https://','').replace('www.','')}
+            </a>
+          </p>
         </header>
 
-        <section className="mb-4">
-          <h2 className="text-sm font-semibold">Professional Summary</h2>
-          <p className="mt-2 text-sm leading-relaxed">{resume.summary}</p>
+        {/* Professional Summary */}
+        <section className="mb-6">
+          <h2 className="text-lg font-bold text-slate-900 mb-3 uppercase tracking-wide">Professional Summary</h2>
+          <p className="text-sm leading-relaxed text-slate-700">{resume.summary}</p>
         </section>
 
-        <section className="mb-4">
-          <h2 className="text-sm font-semibold">Skills</h2>
-          <p className="mt-2 text-sm">{resume.skills.join(', ')}</p>
+        {/* Skills */}
+        <section className="mb-6">
+          <h2 className="text-lg font-bold text-slate-900 mb-3 uppercase tracking-wide">Skills</h2>
+          <p className="text-sm text-slate-700">{resume.skills.join(' • ')}</p>
         </section>
 
-        <section className="mb-4">
-          <h2 className="text-sm font-semibold">Experience</h2>
-          <div className="mt-2 space-y-4">
+        {/* Experience */}
+        <section className="mb-6">
+          <h2 className="text-lg font-bold text-slate-900 mb-3 uppercase tracking-wide">Experience</h2>
+          <div className="space-y-5">
             {resume.experience.map((job, idx) => (
-              <article key={idx}>
-                <div className="flex justify-between items-start">
+              <article key={idx} className="border-l-4 border-slate-300 pl-4">
+                <div className="flex justify-between items-start mb-2">
                   <div>
-                    <h3 className="text-sm font-semibold">{job.role}</h3>
-                    <p className="text-xs opacity-80">{job.company} — {job.location}</p>
+                    <h3 className="text-base font-bold text-slate-900">{job.role}</h3>
+                    <p className="text-sm text-slate-600 font-medium">{job.company} — {job.location}</p>
                   </div>
-                  <div className="text-xs opacity-70">{job.date}</div>
+                  <div className="text-sm text-slate-500 whitespace-nowrap ml-4">{job.date}</div>
                 </div>
-                <ul className="mt-2 list-disc list-inside text-sm space-y-1">
-                  {job.bullets.map((b, i) => <li key={i}>{b}</li>)}
+                <ul className="mt-2 space-y-1">
+                  {job.bullets.map((b, i) => (
+                    <li key={i} className="text-sm text-slate-700 flex">
+                      <span className="mr-2">•</span>
+                      <span>{b}</span>
+                    </li>
+                  ))}
                 </ul>
               </article>
             ))}
           </div>
         </section>
 
-        <section className="mb-4">
-          <h2 className="text-sm font-semibold">Education</h2>
-          <ul className="mt-2 list-disc list-inside text-sm">
-            {resume.education.map((e, i) => <li key={i}>{e}</li>)}
+        {/* Education */}
+        <section className="mb-6">
+          <h2 className="text-lg font-bold text-slate-900 mb-3 uppercase tracking-wide">Education</h2>
+          <ul className="space-y-1">
+            {resume.education.map((e, i) => (
+              <li key={i} className="text-sm text-slate-700 flex">
+                <span className="mr-2">•</span>
+                <span>{e}</span>
+              </li>
+            ))}
           </ul>
         </section>
 
-        <footer className="mt-8 text-xs opacity-80">Updated: Oct 23, 2025</footer>
+        <footer className="mt-12 pt-4 border-t border-slate-200 text-xs text-slate-500">
+          Updated: Oct 23, 2025
+        </footer>
       </div>
     </div>
   );

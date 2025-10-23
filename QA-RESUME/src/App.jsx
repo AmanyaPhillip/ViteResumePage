@@ -12,10 +12,10 @@ const resume = {
   summary:
     'Detail-oriented QA Automation Engineer with 3+ years of experience designing, developing, and executing comprehensive test plans for complex enterprise web and mobile applications. Skilled in UI, API, and ETL testing, with strong proficiency in Selenium, Playwright, Postman and SQL. Adept at collaborating with cross-functional Agile teams to enhance automation coverage, improve test efficiency, and deliver robust, high-quality products. Skilled in identifying, documenting, and tracking bugs through project management tools while partnering with developers to reproduce, analyze, and resolve defects. Committed to continuous improvement through constructive feedback, automation best practices, and efficient QA workflows that ensure smooth, high-quality releases.',
   highlights: [
-    { icon: '🎯', text: '3+ Years QA Experience', color: 'text-blue-600' },
-    { icon: '⚡', text: '30% Test Efficiency Gain', color: 'text-emerald-600' },
-    { icon: '🤖', text: '200+ Automated Tests', color: 'text-purple-600' },
-    { icon: '🔍', text: 'Full-Stack Testing', color: 'text-orange-600' }
+    { text: '3+ Years QA Experience', color: 'text-blue-600' },
+    { text: '30% Test Efficiency Gain', color: 'text-emerald-600' },
+    { text: '200+ Automated Tests', color: 'text-cyan-600' },
+    { text: 'Full-Stack Testing', color: 'text-indigo-600' }
   ],
   technicalSkills: {
     'Automation & Tools': {
@@ -28,19 +28,19 @@ const resume = {
     },
     'Frameworks & DevOps': {
       items: ['Cucumber', 'Robot Framework', 'Azure DevOps', 'GitLab CI/CD', 'Jira'],
-      color: 'bg-purple-100 text-purple-800 border-purple-300'
+      color: 'bg-cyan-100 text-cyan-800 border-cyan-300'
     },
     'Testing Expertise': {
       items: ['UI Testing', 'Functional', 'Regression', 'Smoke', 'Performance', 'API Testing'],
-      color: 'bg-orange-100 text-orange-800 border-orange-300'
+      color: 'bg-sky-100 text-sky-800 border-sky-300'
     },
     'Databases': {
       items: ['MySQL', 'PostgreSQL', 'Advanced SQL', 'Data Validation'],
-      color: 'bg-pink-100 text-pink-800 border-pink-300'
+      color: 'bg-indigo-100 text-indigo-800 border-indigo-300'
     },
     'Methodologies': {
       items: ['Agile / Scrum', 'Shift-Left Testing', 'CI/CD', 'Risk-Based Testing'],
-      color: 'bg-indigo-100 text-indigo-800 border-indigo-300'
+      color: 'bg-teal-100 text-teal-800 border-teal-300'
     }
   },
   experience: [
@@ -81,8 +81,68 @@ const resume = {
     degree: 'Bachelor of Science: Computer Science with Distinction',
     school: 'Carleton University',
     location: 'Ottawa, Canada',
-    date: 'Feb 2021'
-  }
+    date: 'Feb 2021',
+    details: 'Gained foundational knowledge in Python, Java, C, C++, Haskell, Prolog, Database Structures and Management, and Algorithm Structures.'
+  },
+  awards: [
+    {
+      title: 'Delivery Ninja Award',
+      year: '2023',
+      description: 'Recognized for consistently delivering exceptional work ahead of deadlines, demonstrating a strong sense of ownership and dedication.',
+      color: 'border-blue-500'
+    },
+    {
+      title: 'IBM Full Stack Software Developer Professional Certificate',
+      year: 'Aug 2025',
+      description: 'Completed comprehensive professional certificate program covering full-stack development, cloud technologies, and modern software engineering practices.',
+      color: 'border-cyan-500',
+      link: 'https://coursera.org/share/d152dbab8e9bb0cb4475513980e6754c'
+    }
+  ],
+  projects: [
+    {
+      title: 'Data Structures Library',
+      description: 'Developed a comprehensive library of fundamental data structures to optimize algorithmic efficiency and improve runtime performance. Implemented common structures such as linked lists, stacks, queues, trees, and hash maps with focus on performance optimization.',
+      technologies: ['Java 17', 'Maven', 'Data Structures', 'Algorithm Optimization'],
+      githubLink: 'https://github.com/AmanyaPhillip/Portfolio/tree/main/Software%20Development/Java/DataSturctures/datastructures',
+      color: 'bg-blue-100 text-blue-800 border-blue-300'
+    },
+    {
+      title: 'Taxi Dispatch Simulation',
+      description: 'Created a GUI-based taxi dispatch simulator demonstrating full-stack workflow and MVC architecture. Designed an interactive user interface for dispatch operations and real-time taxi tracking with efficient matching algorithms.',
+      technologies: ['Java 11', 'JavaFX', 'Maven', 'MVC Pattern'],
+      githubLink: 'https://github.com/AmanyaPhillip/Portfolio/tree/main/Software%20Development/Java/Taxi%20Dispatch%20Simulation/taxidispatcher',
+      color: 'bg-cyan-100 text-cyan-800 border-cyan-300'
+    },
+    {
+      title: 'Local Air Hockey',
+      description: 'Built a multiplayer real-time air hockey game with chat functionality and physics simulation. Implemented real-time communication using Socket.IO for multiplayer gameplay and Matter.js for realistic physics.',
+      technologies: ['Node.js', 'JavaScript ES6+', 'Socket.IO', 'Matter.js', 'HTML5'],
+      githubLink: 'https://github.com/AmanyaPhillip/Portfolio/tree/main/Software%20Development/JavaScript/Local%20Airhocky',
+      color: 'bg-emerald-100 text-emerald-800 border-emerald-300'
+    },
+    {
+      title: 'BankApp',
+      description: 'Developed a secure online banking web application with core banking functionalities. Implemented secure authentication, encrypted password storage, and RESTful APIs for account management and transactions.',
+      technologies: ['Java 17', 'Spring Boot', 'MySQL', 'JPA/Hibernate'],
+      githubLink: 'https://github.com/AmanyaPhillip/Portfolio/tree/main/Software%20Development/Java/BankApp',
+      color: 'bg-indigo-100 text-indigo-800 border-indigo-300'
+    },
+    {
+      title: 'Farm Management System',
+      description: 'Mobile app to manage crops, monitor farm resources, and provide analytics. Implemented real-time updates for crop tracking and developed interactive dashboards for farm productivity metrics.',
+      technologies: ['Dart', 'Flutter', 'Firebase', 'Mobile Development'],
+      githubLink: 'https://github.com/AmanyaPhillip/Farm-Management',
+      color: 'bg-teal-100 text-teal-800 border-teal-300'
+    },
+    {
+      title: 'Geotab Tracker',
+      description: 'Real-time GPS tracking web application for vehicles. Built interactive maps with live location tracking and filtering, ensuring cross-device responsiveness and performance optimization.',
+      technologies: ['JavaScript ES6+', 'HTML5', 'Leaflet.js', 'GPS Tracking'],
+      githubLink: 'https://github.com/AmanyaPhillip/geotab-tracker',
+      color: 'bg-sky-100 text-sky-800 border-sky-300'
+    }
+  ]
 };
 
 export default function App() {
@@ -90,8 +150,13 @@ export default function App() {
   const [showDownloadModal, setShowDownloadModal] = useState(false);
 
   const handleDownload = () => {
-    // Trigger print dialog which can save as PDF
-    window.print();
+    // Download the actual PDF resume
+    const link = document.createElement('a');
+    link.href = '/QA_resume.pdf'; // Path to your PDF in the public folder
+    link.download = 'Phillip_Asiimwe_QA_Resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
     setShowDownloadModal(false);
   };
 
@@ -104,13 +169,13 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50">
       {/* Sticky Navigation */}
       <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 shadow-sm print:hidden">
         <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-2">
-              <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                 {resume.name.split(' ')[0]}
               </span>
               <span className="text-slate-600">|</span>
@@ -118,7 +183,7 @@ export default function App() {
             </div>
             
             <div className="hidden md:flex items-center space-x-6">
-              {['about', 'skills', 'experience', 'education'].map((section) => (
+              {['about', 'skills', 'experience', 'education', 'awards', 'projects'].map((section) => (
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
@@ -135,7 +200,7 @@ export default function App() {
 
             <button
               onClick={() => setShowDownloadModal(true)}
-              className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-md"
+              className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-lg hover:from-blue-700 hover:to-cyan-700 transition-all transform hover:scale-105 shadow-md"
             >
               <span>📥</span>
               <span className="font-medium">Download Resume</span>
@@ -145,7 +210,7 @@ export default function App() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white py-20 print:py-8">
+      <section className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 text-white py-20 print:py-8">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="relative max-w-6xl mx-auto px-6">
           <div className="text-center space-y-6">
@@ -186,7 +251,6 @@ export default function App() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-8 max-w-4xl mx-auto">
               {resume.highlights.map((highlight, idx) => (
                 <div key={idx} className="bg-white/20 backdrop-blur-sm rounded-xl p-4 hover:bg-white/30 transition-all transform hover:scale-105">
-                  <div className="text-3xl mb-2">{highlight.icon}</div>
                   <div className="font-semibold">{highlight.text}</div>
                 </div>
               ))}
@@ -202,7 +266,7 @@ export default function App() {
         <section id="about" className="scroll-mt-20">
           <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 border border-slate-200">
             <h2 className="text-3xl font-bold text-slate-900 mb-6 flex items-center">
-              <span className="text-4xl mr-3"></span>
+              <span className="text-4xl mr-3">👨🏾‍💻</span>
               About Me
             </h2>
             <p className="text-lg leading-relaxed text-slate-700">
@@ -214,7 +278,7 @@ export default function App() {
         {/* Skills Section */}
         <section id="skills" className="scroll-mt-20">
           <h2 className="text-3xl font-bold text-slate-900 mb-8 flex items-center">
-            <span className="text-4xl mr-3"></span>
+            <span className="text-4xl mr-3">⚙️</span>
             Technical Skills
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -242,7 +306,7 @@ export default function App() {
         {/* Experience Section */}
         <section id="experience" className="scroll-mt-20">
           <h2 className="text-3xl font-bold text-slate-900 mb-8 flex items-center">
-            <span className="text-4xl mr-3"></span>
+            <span className="text-4xl mr-3">💼</span>
             Work Experience
           </h2>
           <div className="space-y-8">
@@ -253,7 +317,6 @@ export default function App() {
               >
                 <div className="flex items-start justify-between mb-6">
                   <div className="flex items-start space-x-4">
-                    <span className="text-4xl">{job.icon}</span>
                     <div>
                       <h3 className="text-2xl font-bold text-slate-900">{job.role}</h3>
                       <p className="text-lg text-slate-700 font-medium">{job.company}</p>
@@ -280,14 +343,13 @@ export default function App() {
         </section>
 
         {/* Education Section */}
-        <section id="education" className="scroll-mt-20 pb-12">
+        <section id="education" className="scroll-mt-20">
           <h2 className="text-3xl font-bold text-slate-900 mb-8 flex items-center">
-            <span className="text-4xl mr-3"></span>
+            <span className="text-4xl mr-3">🎓</span>
             Education
           </h2>
-          <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl shadow-xl p-8 border-2 border-blue-200">
+          <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl shadow-xl p-8 border-2 border-blue-200">
             <div className="flex items-start space-x-4">
-              <span className="text-5xl">{resume.education.icon}</span>
               <div>
                 <h3 className="text-2xl font-bold text-slate-900 mb-2">
                   {resume.education.degree}
@@ -297,8 +359,94 @@ export default function App() {
                 <span className="inline-block mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium">
                   {resume.education.date}
                 </span>
+                <p className="text-slate-700 mt-4 leading-relaxed">
+                  {resume.education.details}
+                </p>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Awards Section */}
+        <section id="awards" className="scroll-mt-20">
+          <h2 className="text-3xl font-bold text-slate-900 mb-8 flex items-center">
+            <span className="text-4xl mr-3">🏆</span>
+            Awards & Achievements
+          </h2>
+          <div className="space-y-6">
+            {resume.awards.map((award, idx) => (
+              <div
+                key={idx}
+                className={`bg-white rounded-2xl shadow-xl p-8 border-l-8 ${award.color} hover:shadow-2xl transition-all`}
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h3 className="text-2xl font-bold text-slate-900">
+                      {award.title}
+                    </h3>
+                  </div>
+                  <span className="inline-block px-4 py-2 bg-slate-100 text-slate-700 rounded-lg font-medium text-sm">
+                    {award.year}
+                  </span>
+                </div>
+                <p className="text-slate-700 leading-relaxed">
+                  {award.description}
+                </p>
+                {award.link && (
+                  <a
+                    href={award.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center space-x-2 text-blue-600 hover:text-blue-700 font-medium mt-4"
+                  >
+                    <span>🔗</span>
+                    <span>View Certificate</span>
+                    <span>→</span>
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Projects Section */}
+        <section id="projects" className="scroll-mt-20 pb-12">
+          <h2 className="text-3xl font-bold text-slate-900 mb-8 flex items-center">
+            <span className="text-4xl mr-3">🚀</span>
+            Featured Projects
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {resume.projects.map((project, idx) => (
+              <div
+                key={idx}
+                className="bg-white rounded-xl shadow-lg p-6 border-2 border-slate-200 hover:shadow-2xl transition-all transform hover:scale-105"
+              >
+                <h3 className="text-xl font-bold text-slate-900 mb-3">{project.title}</h3>
+                <p className="text-slate-700 mb-4 leading-relaxed">
+                  {project.description}
+                </p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {project.technologies.map((tech, i) => (
+                    <span
+                      key={i}
+                      className={`px-3 py-1 rounded-full text-sm font-medium border-2 ${project.color}`}
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+                <a
+                  href={project.githubLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center space-x-2 text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  <span>💻</span>
+                  <span>View on GitHub</span>
+                  <span>→</span>
+                </a>
+              </div>
+            ))}
           </div>
         </section>
       </div>
@@ -309,16 +457,16 @@ export default function App() {
           <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md mx-4" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-2xl font-bold text-slate-900 mb-4">Download Resume</h3>
             <p className="text-slate-600 mb-6">
-              Choose how you'd like to download the resume:
+              Download my professional QA resume in PDF format.
             </p>
             <div className="space-y-3">
               <button
                 onClick={handleDownload}
-                className="w-full flex items-center justify-between px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105"
+                className="w-full flex items-center justify-between px-6 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-lg hover:from-blue-700 hover:to-cyan-700 transition-all transform hover:scale-105"
               >
                 <span className="flex items-center space-x-3">
                   <span className="text-2xl">📄</span>
-                  <span className="font-medium">Save as PDF</span>
+                  <span className="font-medium">Download PDF Resume</span>
                 </span>
                 <span>→</span>
               </button>
@@ -329,9 +477,6 @@ export default function App() {
                 Cancel
               </button>
             </div>
-            <p className="text-xs text-slate-500 mt-4 text-center">
-              Tip: Use Ctrl+P (Cmd+P on Mac) to print or save as PDF
-            </p>
           </div>
         </div>
       )}

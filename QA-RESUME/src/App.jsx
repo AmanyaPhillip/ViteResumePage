@@ -152,7 +152,7 @@ export default function App() {
   const handleDownload = () => {
     // Download the actual PDF resume
     const link = document.createElement('a');
-    link.href = '/QA_resume.pdf'; // Path to your PDF in the public folder
+    link.href = `${import.meta.env.BASE_URL}QA_resume.pdf`;
     link.download = 'Phillip_Asiimwe_QA_Resume.pdf';
     document.body.appendChild(link);
     link.click();

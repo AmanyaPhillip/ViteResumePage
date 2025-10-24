@@ -175,11 +175,11 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-2">
-              <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              <span className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                 {resume.name.split(' ')[0]}
               </span>
               <span className="text-slate-600">|</span>
-              <span className="text-sm text-slate-600 font-medium">QA Engineer</span>
+              <span className="text-xs md:text-sm text-slate-600 font-medium">QA Engineer</span>
             </div>
             
             <div className="hidden md:flex items-center space-x-6">
@@ -200,58 +200,61 @@ export default function App() {
 
             <button
               onClick={() => setShowDownloadModal(true)}
-              className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-lg hover:from-blue-700 hover:to-cyan-700 transition-all transform hover:scale-105 shadow-md"
+              className="flex items-center space-x-2 px-3 md:px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-lg hover:from-blue-700 hover:to-cyan-700 transition-all transform hover:scale-105 shadow-md text-sm"
             >
               <span>📥</span>
-              <span className="font-medium">Download Resume</span>
+              <span className="font-medium hidden sm:inline">Download Resume</span>
+              <span className="font-medium sm:hidden">PDF</span>
             </button>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 text-white py-20 print:py-8">
+      <section className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 text-white py-12 md:py-20 print:py-8">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="relative max-w-6xl mx-auto px-6">
-          <div className="text-center space-y-6">
-            <div className="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium mb-4">
+          <div className="text-center space-y-4 md:space-y-6">
+            <div className="inline-block px-3 md:px-4 py-1 md:py-2 bg-white/20 backdrop-blur-sm rounded-full text-xs md:text-sm font-medium mb-2 md:mb-4">
               ✨ Available for QA Opportunities
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
+            <h1 className="text-3xl md:text-6xl font-bold tracking-tight">
               {resume.name}
             </h1>
-            <p className="text-2xl md:text-3xl font-light opacity-90">
+            <p className="text-xl md:text-3xl font-light opacity-90">
               {resume.title}
             </p>
-            <p className="text-lg md:text-xl opacity-80 max-w-2xl mx-auto">
+            <p className="text-base md:text-xl opacity-80 max-w-2xl mx-auto">
               {resume.tagline}
             </p>
             
             {/* Contact Info */}
-            <div className="flex flex-wrap justify-center gap-4 pt-6">
-              <a href={`mailto:${resume.email}`} className="flex items-center space-x-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-all">
+            <div className="flex flex-wrap justify-center gap-2 md:gap-4 pt-4 md:pt-6">
+              <a href={`mailto:${resume.email}`} className="flex items-center space-x-2 px-3 md:px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-all text-sm md:text-base">
                 <span>📧</span>
-                <span>{resume.email}</span>
+                <span className="hidden sm:inline">{resume.email}</span>
+                <span className="sm:hidden">Email</span>
               </a>
-              <a href={`tel:${resume.phone}`} className="flex items-center space-x-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-all">
+              <a href={`tel:${resume.phone}`} className="flex items-center space-x-2 px-3 md:px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-all text-sm md:text-base">
                 <span>📱</span>
-                <span>{resume.phone}</span>
+                <span className="hidden sm:inline">{resume.phone}</span>
+                <span className="sm:hidden">Phone</span>
               </a>
-              <a href={resume.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-all">
+              <a href={resume.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 px-3 md:px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-all text-sm md:text-base">
                 <span>💼</span>
                 <span>LinkedIn</span>
               </a>
-              <a href={resume.github} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-all">
+              <a href={resume.github} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 px-3 md:px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-all text-sm md:text-base">
                 <span>💻</span>
                 <span>GitHub</span>
               </a>
             </div>
 
             {/* Highlights */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-8 max-w-4xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 pt-6 md:pt-8 max-w-4xl mx-auto">
               {resume.highlights.map((highlight, idx) => (
-                <div key={idx} className="bg-white/20 backdrop-blur-sm rounded-xl p-4 hover:bg-white/30 transition-all transform hover:scale-105">
-                  <div className="font-semibold">{highlight.text}</div>
+                <div key={idx} className="bg-white/20 backdrop-blur-sm rounded-xl p-3 md:p-4 hover:bg-white/30 transition-all transform hover:scale-105">
+                  <div className="font-semibold text-sm md:text-base">{highlight.text}</div>
                 </div>
               ))}
             </div>
@@ -260,16 +263,16 @@ export default function App() {
       </section>
 
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-6 py-12 space-y-16">
+      <div className="max-w-6xl mx-auto px-6 py-8 md:py-12 space-y-12 md:space-y-16">
         
         {/* About Section */}
         <section id="about" className="scroll-mt-20">
-          <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 border border-slate-200">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6 flex items-center">
-              <span className="text-4xl mr-3">👨🏾‍💻</span>
+          <div className="bg-white rounded-2xl shadow-xl p-6 md:p-12 border border-slate-200">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4 md:mb-6 flex items-center">
+              <span className="text-3xl md:text-4xl mr-3">👨🏾‍💻</span>
               About Me
             </h2>
-            <p className="text-lg leading-relaxed text-slate-700">
+            <p className="text-base md:text-lg leading-relaxed text-slate-700">
               {resume.summary}
             </p>
           </div>
@@ -277,22 +280,22 @@ export default function App() {
 
         {/* Skills Section */}
         <section id="skills" className="scroll-mt-20">
-          <h2 className="text-3xl font-bold text-slate-900 mb-8 flex items-center">
-            <span className="text-4xl mr-3">⚙️</span>
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6 md:mb-8 flex items-center">
+            <span className="text-3xl md:text-4xl mr-3">⚙️</span>
             Technical Skills
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {Object.entries(resume.technicalSkills).map(([category, data], idx) => (
               <div
                 key={idx}
-                className="bg-white rounded-xl shadow-lg p-6 border-2 hover:shadow-2xl transition-all transform hover:scale-105"
+                className="bg-white rounded-xl shadow-lg p-4 md:p-6 border-2 hover:shadow-2xl transition-all transform hover:scale-105"
               >
-                <h3 className="font-bold text-slate-900 mb-4 text-lg">{category}</h3>
+                <h3 className="font-bold text-slate-900 mb-3 md:mb-4 text-base md:text-lg">{category}</h3>
                 <div className="flex flex-wrap gap-2">
                   {data.items.map((skill, i) => (
                     <span
                       key={i}
-                      className={`px-3 py-1 rounded-full text-sm font-medium border-2 ${data.color} transition-all hover:scale-110`}
+                      className={`px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium border-2 ${data.color} transition-all hover:scale-110`}
                     >
                       {skill}
                     </span>
@@ -305,34 +308,34 @@ export default function App() {
 
         {/* Experience Section */}
         <section id="experience" className="scroll-mt-20">
-          <h2 className="text-3xl font-bold text-slate-900 mb-8 flex items-center">
-            <span className="text-4xl mr-3">💼</span>
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6 md:mb-8 flex items-center">
+            <span className="text-3xl md:text-4xl mr-3">💼</span>
             Work Experience
           </h2>
-          <div className="space-y-8">
+          <div className="space-y-6 md:space-y-8">
             {resume.experience.map((job, idx) => (
               <div
                 key={idx}
-                className={`bg-white rounded-2xl shadow-xl p-8 border-l-8 ${job.color} hover:shadow-2xl transition-all`}
+                className={`bg-white rounded-2xl shadow-xl p-6 md:p-8 border-l-8 ${job.color} hover:shadow-2xl transition-all`}
               >
-                <div className="flex items-start justify-between mb-6">
+                <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4 md:mb-6 space-y-2 md:space-y-0">
                   <div className="flex items-start space-x-4">
                     <div>
-                      <h3 className="text-2xl font-bold text-slate-900">{job.role}</h3>
-                      <p className="text-lg text-slate-700 font-medium">{job.company}</p>
-                      <p className="text-slate-600">{job.location}</p>
+                      <h3 className="text-xl md:text-2xl font-bold text-slate-900">{job.role}</h3>
+                      <p className="text-base md:text-lg text-slate-700 font-medium">{job.company}</p>
+                      <p className="text-sm md:text-base text-slate-600">{job.location}</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <span className="inline-block px-4 py-2 bg-slate-100 text-slate-700 rounded-lg font-medium text-sm">
+                  <div className="text-left md:text-right">
+                    <span className="inline-block px-3 md:px-4 py-1 md:py-2 bg-slate-100 text-slate-700 rounded-lg font-medium text-xs md:text-sm">
                       {job.date}
                     </span>
                   </div>
                 </div>
-                <ul className="space-y-3">
+                <ul className="space-y-2 md:space-y-3">
                   {job.bullets.map((bullet, i) => (
-                    <li key={i} className="flex items-start text-slate-700">
-                      <span className="text-blue-600 mr-3 mt-1 flex-shrink-0">▸</span>
+                    <li key={i} className="flex items-start text-sm md:text-base text-slate-700">
+                      <span className="text-blue-600 mr-2 md:mr-3 mt-1 flex-shrink-0">▸</span>
                       <span className="leading-relaxed">{bullet}</span>
                     </li>
                   ))}
@@ -344,22 +347,22 @@ export default function App() {
 
         {/* Education Section */}
         <section id="education" className="scroll-mt-20">
-          <h2 className="text-3xl font-bold text-slate-900 mb-8 flex items-center">
-            <span className="text-4xl mr-3">🎓</span>
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6 md:mb-8 flex items-center">
+            <span className="text-3xl md:text-4xl mr-3">🎓</span>
             Education
           </h2>
-          <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl shadow-xl p-8 border-2 border-blue-200">
+          <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl shadow-xl p-6 md:p-8 border-2 border-blue-200">
             <div className="flex items-start space-x-4">
               <div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-2">
+                <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">
                   {resume.education.degree}
                 </h3>
-                <p className="text-lg text-slate-700 font-medium">{resume.education.school}</p>
-                <p className="text-slate-600">{resume.education.location}</p>
-                <span className="inline-block mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium">
+                <p className="text-base md:text-lg text-slate-700 font-medium">{resume.education.school}</p>
+                <p className="text-sm md:text-base text-slate-600">{resume.education.location}</p>
+                <span className="inline-block mt-3 px-3 md:px-4 py-1 md:py-2 bg-blue-600 text-white rounded-lg font-medium text-sm md:text-base">
                   {resume.education.date}
                 </span>
-                <p className="text-slate-700 mt-4 leading-relaxed">
+                <p className="text-sm md:text-base text-slate-700 mt-4 leading-relaxed">
                   {resume.education.details}
                 </p>
               </div>
@@ -369,27 +372,27 @@ export default function App() {
 
         {/* Awards Section */}
         <section id="awards" className="scroll-mt-20">
-          <h2 className="text-3xl font-bold text-slate-900 mb-8 flex items-center">
-            <span className="text-4xl mr-3">🏆</span>
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6 md:mb-8 flex items-center">
+            <span className="text-3xl md:text-4xl mr-3">🏆</span>
             Awards & Achievements
           </h2>
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             {resume.awards.map((award, idx) => (
               <div
                 key={idx}
-                className={`bg-white rounded-2xl shadow-xl p-8 border-l-8 ${award.color} hover:shadow-2xl transition-all`}
+                className={`bg-white rounded-2xl shadow-xl p-6 md:p-8 border-l-8 ${award.color} hover:shadow-2xl transition-all`}
               >
-                <div className="flex items-start justify-between mb-4">
+                <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-3 md:mb-4 space-y-2 md:space-y-0">
                   <div>
-                    <h3 className="text-2xl font-bold text-slate-900">
+                    <h3 className="text-xl md:text-2xl font-bold text-slate-900">
                       {award.title}
                     </h3>
                   </div>
-                  <span className="inline-block px-4 py-2 bg-slate-100 text-slate-700 rounded-lg font-medium text-sm">
+                  <span className="inline-block px-3 md:px-4 py-1 md:py-2 bg-slate-100 text-slate-700 rounded-lg font-medium text-xs md:text-sm self-start">
                     {award.year}
                   </span>
                 </div>
-                <p className="text-slate-700 leading-relaxed">
+                <p className="text-sm md:text-base text-slate-700 leading-relaxed">
                   {award.description}
                 </p>
                 {award.link && (
@@ -397,7 +400,7 @@ export default function App() {
                     href={award.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center space-x-2 text-blue-600 hover:text-blue-700 font-medium mt-4"
+                    className="inline-flex items-center space-x-2 text-blue-600 hover:text-blue-700 font-medium mt-4 text-sm md:text-base"
                   >
                     <span>🔗</span>
                     <span>View Certificate</span>
@@ -410,26 +413,26 @@ export default function App() {
         </section>
 
         {/* Projects Section */}
-        <section id="projects" className="scroll-mt-20 pb-12">
-          <h2 className="text-3xl font-bold text-slate-900 mb-8 flex items-center">
-            <span className="text-4xl mr-3">🚀</span>
+        <section id="projects" className="scroll-mt-20 pb-8 md:pb-12">
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6 md:mb-8 flex items-center">
+            <span className="text-3xl md:text-4xl mr-3">🚀</span>
             Featured Projects
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {resume.projects.map((project, idx) => (
               <div
                 key={idx}
-                className="bg-white rounded-xl shadow-lg p-6 border-2 border-slate-200 hover:shadow-2xl transition-all transform hover:scale-105"
+                className="bg-white rounded-xl shadow-lg p-4 md:p-6 border-2 border-slate-200 hover:shadow-2xl transition-all transform hover:scale-105"
               >
-                <h3 className="text-xl font-bold text-slate-900 mb-3">{project.title}</h3>
-                <p className="text-slate-700 mb-4 leading-relaxed">
+                <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-2 md:mb-3">{project.title}</h3>
+                <p className="text-sm md:text-base text-slate-700 mb-3 md:mb-4 leading-relaxed">
                   {project.description}
                 </p>
-                <div className="flex flex-wrap gap-2 mb-4">
+                <div className="flex flex-wrap gap-2 mb-3 md:mb-4">
                   {project.technologies.map((tech, i) => (
                     <span
                       key={i}
-                      className={`px-3 py-1 rounded-full text-sm font-medium border-2 ${project.color}`}
+                      className={`px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium border-2 ${project.color}`}
                     >
                       {tech}
                     </span>
@@ -439,7 +442,7 @@ export default function App() {
                   href={project.githubLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center space-x-2 text-blue-600 hover:text-blue-700 font-medium"
+                  className="inline-flex items-center space-x-2 text-blue-600 hover:text-blue-700 font-medium text-sm md:text-base"
                 >
                   <span>💻</span>
                   <span>View on GitHub</span>
@@ -454,25 +457,25 @@ export default function App() {
       {/* Download Modal */}
       {showDownloadModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm print:hidden" onClick={() => setShowDownloadModal(false)}>
-          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md mx-4" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-2xl font-bold text-slate-900 mb-4">Download Resume</h3>
-            <p className="text-slate-600 mb-6">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 md:p-8 max-w-md mx-4" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-3 md:mb-4">Download Resume</h3>
+            <p className="text-sm md:text-base text-slate-600 mb-4 md:mb-6">
               Download my professional QA resume in PDF format.
             </p>
             <div className="space-y-3">
               <button
                 onClick={handleDownload}
-                className="w-full flex items-center justify-between px-6 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-lg hover:from-blue-700 hover:to-cyan-700 transition-all transform hover:scale-105"
+                className="w-full flex items-center justify-between px-4 md:px-6 py-3 md:py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-lg hover:from-blue-700 hover:to-cyan-700 transition-all transform hover:scale-105 text-sm md:text-base"
               >
                 <span className="flex items-center space-x-3">
-                  <span className="text-2xl">📄</span>
+                  <span className="text-xl md:text-2xl">📄</span>
                   <span className="font-medium">Download PDF Resume</span>
                 </span>
                 <span>→</span>
               </button>
               <button
                 onClick={() => setShowDownloadModal(false)}
-                className="w-full px-6 py-4 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-all font-medium"
+                className="w-full px-4 md:px-6 py-3 md:py-4 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-all font-medium text-sm md:text-base"
               >
                 Cancel
               </button>
@@ -482,12 +485,12 @@ export default function App() {
       )}
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-white py-8 print:hidden">
+      <footer className="bg-slate-900 text-white py-6 md:py-8 print:hidden">
         <div className="max-w-6xl mx-auto px-6 text-center">
-          <p className="text-slate-400">
+          <p className="text-sm md:text-base text-slate-400">
             © 2025 {resume.name}. Built with React & Tailwind CSS.
           </p>
-          <p className="text-slate-500 text-sm mt-2">
+          <p className="text-slate-500 text-xs md:text-sm mt-2">
             Looking for a dedicated QA professional? Let's connect!
           </p>
         </div>

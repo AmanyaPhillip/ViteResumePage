@@ -1,1 +1,257 @@
 @import "tailwindcss";
+
+/* ─── Design Tokens ────────────────────────────────────────────────────────── */
+:root {
+  --accent:      #c45c00;
+  --accent-warm: #ff6b35;
+  --brand:       #1a1a1a;
+  --surface:     #f8f6f1;
+  --surface-alt: #f0ede6;
+  --surface-dark:#222222;
+  --muted:       #767676;
+  --border:      #1a1a1a;
+  --forest:      #1a5c3a;
+  --font-serif:  'Noto Serif', Georgia, 'Times New Roman', serif;
+  --font-sans:   'Space Grotesk', system-ui, -apple-system, sans-serif;
+}
+
+/* ─── Base Reset ────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--surface);
+  color: var(--brand);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+}
+
+/* ─── CS Lattice Background ─────────────────────────────────────────────────── */
+.lattice-bg {
+  background-color: var(--surface);
+  background-image:
+    linear-gradient(rgba(26,26,26,0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26,26,26,0.055) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* ─── Bento Card ────────────────────────────────────────────────────────────── */
+.bento-card {
+  background: #fff;
+  border: 2px solid var(--border);
+  box-shadow: 4px 4px 0px var(--border);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.bento-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--border);
+}
+
+.bento-card-dark {
+  background: var(--surface-dark);
+  border: 2px solid #333;
+  box-shadow: 4px 4px 0px var(--accent);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.bento-card-dark:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--accent);
+}
+
+/* ─── Profile Photo ─────────────────────────────────────────────────────────── */
+.profile-photo {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 3px solid var(--brand);
+  overflow: hidden;
+  background: var(--brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 5px 5px 0px var(--accent);
+}
+
+.profile-photo .initials {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--surface);
+  position: relative;
+  z-index: 1;
+  user-select: none;
+}
+
+/* ─── Side Nav ──────────────────────────────────────────────────────────────── */
+.side-nav {
+  display: none;
+  position: fixed;
+  left: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+@media (min-width: 1024px) {
+  .side-nav { display: flex; }
+}
+
+.side-nav-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  border: 2px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  outline: none;
+}
+
+.side-nav-dot.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  height: 24px;
+}
+
+/* ─── Section Label ─────────────────────────────────────────────────────────── */
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.section-label::before {
+  content: '';
+  display: block;
+  width: 1.75rem;
+  height: 2px;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+.section-label.light { color: var(--accent); }
+
+/* ─── Skill Tag ─────────────────────────────────────────────────────────────── */
+.skill-tag {
+  border: 1.5px solid #444;
+  padding: 0.25rem 0.65rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #ccc;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.skill-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ─── Contact Link ──────────────────────────────────────────────────────────── */
+.contact-link {
+  border: 2px solid var(--brand);
+  padding: 0.4rem 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--brand);
+  transition: background 0.15s ease, color 0.15s ease;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.contact-link:hover {
+  background: var(--brand);
+  color: var(--surface);
+}
+
+/* ─── Hero Grid ─────────────────────────────────────────────────────────────── */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+}
+
+@media (min-width: 900px) {
+  .hero-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+}
+
+/* ─── Hero Right (photo + wheel) ────────────────────────────────────────────── */
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  order: -1;
+}
+
+@media (min-width: 900px) {
+  .hero-right { order: 0; }
+}
+
+/* ─── Nav hidden on mobile ──────────────────────────────────────────────────── */
+.nav-links {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .nav-links { display: flex; }
+}
+
+/* ─── Scroll margin for fixed nav ───────────────────────────────────────────── */
+.scroll-section { scroll-margin-top: 64px; }
+
+/* ─── Timeline ──────────────────────────────────────────────────────────────── */
+.timeline-container {
+  position: relative;
+  padding-left: 2.75rem;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 9px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: var(--border);
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -2.35rem;
+  top: 0.45rem;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 3px solid var(--surface);
+  outline: 2px solid var(--border);
+}
+
+/* ─── Print ─────────────────────────────────────────────────────────────────── */
+@media print {
+  nav, footer, .side-nav, button { display: none !important; }
+  body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}

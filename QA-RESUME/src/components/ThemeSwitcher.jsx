@@ -17,12 +17,16 @@ export default function ThemeSwitcher() {
         padding: '0.5rem',
         boxShadow: '4px 4px 0px var(--border)',
       }}
+      role="group"
+      aria-label="Theme switcher"
     >
       {Object.entries(themes).map(([key, theme]) => (
         <button
           key={key}
           onClick={() => switchTheme(key)}
           title={theme.name}
+          aria-label={`Switch to ${theme.name}`}
+          aria-pressed={currentTheme === key}
           style={{
             width: '32px',
             height: '32px',
@@ -36,6 +40,8 @@ export default function ThemeSwitcher() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            borderRadius: '4px',
+            outline: 'none',
           }}
           onMouseEnter={(e) => {
             if (currentTheme !== key) {
@@ -44,6 +50,12 @@ export default function ThemeSwitcher() {
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.transform = '';
+          }}
+          onFocus={(e) => {
+            e.currentTarget.style.boxShadow = '0 0 0 2px var(--accent)';
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.boxShadow = '';
           }}
         >
           {theme.label}

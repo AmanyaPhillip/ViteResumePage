@@ -31,12 +31,18 @@ function OrbitalWheel({ onSegmentClick, profileImage }) {
   };
 
   return (
-    <div style={{ position: 'relative', display: 'inline-block' }}>
+    <div
+      style={{ position: 'relative', display: 'inline-block' }}
+      role="group"
+      aria-label="Orbital navigation wheel with 6 sections"
+    >
       <svg
         width={SIZE}
         height={SIZE}
         viewBox={`0 0 ${SIZE} ${SIZE}`}
         style={{ display: 'block' }}
+        role="img"
+        aria-label="Click nodes to navigate to sections"
       >
         {/* Orbit track (thin circle showing the orbital path) */}
         <circle

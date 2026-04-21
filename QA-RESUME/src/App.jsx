@@ -1,5 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
-import NexusWheel from './components/NexusWheel';
+import { useState, useEffect, useCallback, memo } from 'react';
+import OrbitalWheel from './components/OrbitalWheel';
+import ParticleCanvas from './components/ParticleCanvas';
+import ThemeSwitcher from './components/ThemeSwitcher';
+import ProjectModal from './components/ProjectModal';
+import { useTheme } from './context/ThemeContext';
 import './App.css';
 
 // ─── CONTENT ──────────────────────────────────────────────────────────────────
@@ -7,26 +11,36 @@ import './App.css';
 const D = {
   name:         'Phillip Asiimwe',
   brand:        'Technical Organicist',
-  titles:       ['Full-Stack Developer', 'AI Orchestration', 'QA Expert'],
+  titles:       ['AI Enablement Specialist', 'Agentic AI Champion'],
   location:     'Ottawa, Canada',
   availability: 'Open to Remote & Relocation',
   email:        'amanyaphillip@outlook.com',
   phone:        '+1 (613) 890-9830',
-  linkedin:     'https://linkedin.com/in/phillip-asiimwe',
+  linkedin:     'https://www.linkedin.com/in/phillip-amanya/',
   github:       'https://github.com/AmanyaPhillip',
 
   summary: 'Full-stack developer with 3+ years of QA engineering experience at Infosys, specializing in Flutter mobile applications and cloud-integrated backends. Expert at distilling complex technical concepts for public audiences, rooted in 3 years as a Carleton University Teaching Assistant and a career as an AI Advocate. I apply a systematic, quality-first approach to AI-augmented development, delivering production-grade software for global clients.',
 
   skills: [
-    { category: 'Mobile',       items: ['Flutter', 'Dart', 'Riverpod', 'Firebase'] },
-    { category: 'Full-Stack',   items: ['Next.js 15', 'React 19', 'Node.js', 'Spring Boot', 'TypeScript'] },
-    { category: 'Foundational', items: ['C', 'C++', 'Java', 'Python', 'Haskell', 'Prolog'] },
-    { category: 'AI & Agentic', items: ['Claude Code', 'LLM Orchestration', 'Cursor', 'Prompt Engineering'] },
-    { category: 'Quality',      items: ['Selenium', 'Appium', 'Maestro', 'Perfecto', 'Jest', 'Cypress'] },
-    { category: 'Tools',        items: ['Azure CI/CD', 'Git', 'Docker', 'Supabase', 'Postman', 'Jira'] },
+    { category: 'AI Orchestration', items: ['Claude Code', 'LLM Orchestration', 'Cursor', 'Prompt Engineering', 'AI Studio'] },
+    { category: 'Core Software',    items: ['Next.js 15', 'React 19', 'Flutter', 'Node.js', 'Spring Boot', 'TypeScript'] },
+    { category: 'Data Systems',     items: ['Supabase', 'Firebase', 'SQL', 'PostgreSQL', 'SQLite'] },
+    { category: 'Quality & DevOps', items: ['Selenium', 'Appium', 'Maestro', 'Jest', 'Azure CI/CD', 'Docker'] },
+    { category: 'Enablement',       items: ['Public Speaking', 'Technical Writing', 'Mentorship', 'PTAC Method'] },
   ],
 
   experience: [
+    {
+      role:     'AI Enablement Specialist',
+      company:  'Independent',
+      location: 'Remote',
+      period:   '2025 – Present',
+      points: [
+        { label: 'AI Advocacy',      text: 'Delivering public talks on LLM orchestration and agentic AI systems, helping audiences move beyond basic prompts to production-grade AI workflows.' },
+        { label: 'AI Literacy',      text: 'Empowering underserved communities with the PTAC method for responsible AI adoption, demystifying AI for youth and emerging practitioners.' },
+        { label: 'Consulting',       text: 'Advising organizations on agentic AI integration, LLM tooling strategies, and human-in-the-loop oversight systems.' },
+      ],
+    },
     {
       role:     'Senior Quality Assurance Associate',
       company:  'Infosys Limited',
@@ -71,7 +85,20 @@ const D = {
     period:      '2016 – 2021',
     distinction: 'With Distinction',
     gpa:         'CGPA 10.7 / 12',
-    focus:       'Algorithms, Software Engineering, Database Systems',
+    courses: [
+      'Algorithms & Data Structures',
+      'Software Engineering',
+      'Database Systems',
+      'Operating Systems',
+      'Computer Networks',
+      'Programming Languages',
+      'Compiler Design',
+      'Computer Architecture',
+      'Artificial Intelligence',
+      'Parallel Computing',
+      'Discrete Mathematics & Logic',
+      'Object-Oriented Design',
+    ],
   },
 
   certifications: [
@@ -85,6 +112,7 @@ const D = {
       name:   'Google AI Professional Certificate',
       issuer: 'Coursera',
       year:   '2026',
+      link:   'https://coursera.org/verify/professional-cert/81HQPY8E7Z9H',
     },
   ],
 
@@ -98,9 +126,10 @@ const D = {
   ],
 
   projects: [
+    // ── PORTFOLIO: existing projects ──────────────────────────────────────────
     {
       title:       'Asset Rental Management Platform',
-      status:      'LIVE',
+      status:      'PORTFOLIO',
       stack:       ['Flutter', 'Next.js 15', 'Supabase', 'Stripe'],
       description: 'Production alternative to Airbnb for rentals in Zimbabwe. Role-based access for guests and cleaners.',
       bullets: [
@@ -110,7 +139,7 @@ const D = {
     },
     {
       title:       'Claude Code Remote Approval Bridge',
-      status:      'LIVE',
+      status:      'PORTFOLIO',
       stack:       ['Node.js', 'Telegram API', 'IPC', 'AI Hooks'],
       description: 'Human-in-the-loop oversight system for AI coding agents — intercepts tool executions for mobile approval.',
       bullets: [
@@ -120,7 +149,7 @@ const D = {
     },
     {
       title:       'Outlook Inbox AI Classifier',
-      status:      'LIVE',
+      status:      'PORTFOLIO',
       stack:       ['Gemini API', 'MS Graph', 'OpenRouter'],
       description: 'CLI tool for intelligent email classification using multi-model orchestration for cost/accuracy optimization.',
       bullets: [
@@ -129,18 +158,27 @@ const D = {
       ],
     },
     {
-      title:       'LUXO Place Resident App',
-      status:      'LIVE',
-      stack:       ['Flutter', 'Provider', 'Calendly'],
-      description: 'Bilingual app for a luxury complex with maintenance tracking and amenity booking.',
-      bullets:     [],
-    },
-    {
       title:       'Farm Livestock Management App',
-      status:      'LIVE',
+      status:      'PORTFOLIO',
       stack:       ['Flutter', 'SQLite'],
       description: '100% offline livestock tracking app for rural Ugandan farming operations.',
       bullets:     [],
+    },
+    // ── LIVE: spotifyVS — production music compatibility app ────────────────────
+    {
+      title:       'spotifyVS',
+      status:      'LIVE',
+      stack:       ['React 19', 'Node.js', 'Firebase', 'Spotify API'],
+      description: 'Music taste compatibility web app — compare liked songs, genres, and artists with anyone.',
+      personalStatement: `This project started one afternoon while my wife and I were sharing the couch, but existing in two different worlds. I was working on a presentation, she was DJing, and we both had our headphones on. I glanced over, wondering what she was listening to, which quickly evolved into a bigger question: "How compatible is our music taste?"\n\nTo answer that, I used AI Studio to build an application that measures exactly that. While researching, I found that Spotify's API can be quite restrictive regarding the data you can pull. Working within those constraints, I narrowed the scope to liked songs, playlists, and genres.\n\nI created a simple web app where you log in with Spotify to generate a custom link to share with friends or family. When they log in, the app generates a comparison of your liked songs, genres, and similar artists. You can generate links for multiple people, save past comparisons, and even see a dedicated section for songs they liked that you haven't discovered yet—a great way to explore each other's music tastes. If demand grows, I plan to add group comparisons and leaderboards to track who listened the most in a given month.`,
+    },
+    // ── PORTFOLIO: academic & experimental ────────────────────────────────────
+    {
+      title:       'LUXO Place Resident App',
+      status:      'PORTFOLIO',
+      stack:       ['Flutter', 'Provider', 'Calendly'],
+      description: 'Unified resident app for a luxury complex — maintenance, access, community, and amenity booking.',
+      personalStatement: `I built this app out of personal frustration: every time I went to my building's service page, I had to repeatedly fill in my name, number, and apartment details—information that never changes. I started by automating that process and adding a feature to save a detailed record of each submitted request, rather than just receiving a basic acknowledgment.\n\nFrom there, the project naturally expanded. I wanted my lease handy to easily review terms, and I realized there was a completely separate app just for letting guests and delivery drivers into the building. I created a unified concept to handle access, avoiding the need for multiple disjointed apps.\n\nThe real turning point came when a neighbor mentioned they were moving out because the building felt like it was missing something. I realized this place needed a community. People needed a way to tell a neighbor they left their car lights on in the basement to save them from a dead battery. So, I added community features: a lost-and-found feed, a dog-lovers group, and amenities booking.\n\nBefore I knew it, I had built a comprehensive apartment management app. My ultimate goal is for my building's management to issue it to all residents, so we can have the collective power that comes with a group of individuals living through the same experience.`,
     },
     {
       title:       'Online Banking Web Application',
@@ -167,6 +205,14 @@ const D = {
       status:      'PORTFOLIO',
       stack:       ['Python', 'OpenCV', 'NumPy'],
       description: 'CV system using Laplacian edge variance for real-time occupancy detection.',
+    },
+    // ── INITIATIVE: community & advocacy work ─────────────────────────────────
+    {
+      title:       'REWIRE The Future',
+      status:      'INITIATIVE',
+      stack:       ['Public Speaking', 'AI Literacy', 'PTAC Method'],
+      description: 'Youth AI literacy initiative — empowering underserved communities to leverage AI responsibly.',
+      personalStatement: `I recently had a blast presenting to an underserved youth community about the practical uses—and the flaws—of Artificial Intelligence. My goal was to empower them to leverage AI so they aren't left behind in the rapidly evolving race to improve productivity.\n\nThe biggest barrier to successful adoption right now is simply a lack of clear, proper understanding of what AI is and what it can and cannot do. I wanted to demystify the technology and encourage them to start using it powerfully and responsibly using the PTAC method.`,
     },
   ],
 
@@ -397,22 +443,11 @@ function HeroSection({ onNav }) {
 
         {/* ── Right: Photo + Wheel ── */}
         <div className="hero-right">
-          {/* Profile photo */}
-          <div className="profile-photo">
-            <img
-              src={`${import.meta.env.BASE_URL}profile.jpg`}
-              alt="Phillip Asiimwe"
-              onError={e => { e.currentTarget.style.display = 'none'; }}
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-            />
-            <span className="initials">PA</span>
-          </div>
-
-          {/* Nexus Wheel */}
-          <NexusWheel onSegmentClick={onNav} />
+          {/* Orbital Wheel with photo in hub */}
+          <OrbitalWheel onSegmentClick={onNav} />
 
           <p style={{ ...S.label, fontSize: '0.58rem', color: '#767676', textAlign: 'center' }}>
-            Click a segment to navigate
+            Click an orbit node to navigate
           </p>
         </div>
       </div>
@@ -553,8 +588,15 @@ function EducationSection() {
                 {D.education.gpa}
               </span>
             </div>
-            <div style={{ ...S.mono, fontSize: '0.8rem', color: '#555', lineHeight: 1.6 }}>
-              {D.education.focus}
+            <div style={{ ...S.label, fontSize: '0.6rem', color: '#767676', marginBottom: '0.5rem' }}>
+              Key Coursework
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+              {D.education.courses.map(c => (
+                <span key={c} style={{ border: '1.5px solid #ccc', padding: '0.15rem 0.55rem', ...S.label, fontSize: '0.58rem', color: '#444', background: '#fff' }}>
+                  {c}
+                </span>
+              ))}
             </div>
           </div>
 
@@ -606,23 +648,38 @@ function EducationSection() {
 }
 
 // ─── PROJECT CARD ──────────────────────────────────────────────────────────────
+// Memoised so the grid doesn't re-render cards that haven't changed when the
+// modal open/close state updates in the parent ProjectsSection.
 
-function ProjectCard({ project }) {
-  const live = project.status === 'LIVE';
+const ProjectCard = memo(function ProjectCard({ project, onClick }) {
+  const hasStatement = Boolean(project.personalStatement);
+
+  // Badge style varies by status to match the modal's StatusBadge colour scheme
+  const badgeStyle = (() => {
+    if (project.status === 'LIVE')       return { background: '#1a5c3a', color: '#fff' };
+    if (project.status === 'INITIATIVE') return { background: '#4a2d6b', color: '#f8f6f1' };
+    // PORTFOLIO — orange outline (not filled, to distinguish from LIVE)
+    return { border: '2px solid #1a1a1a', color: '#1a1a1a' };
+  })();
+
   return (
-    <div className="bento-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+    // project-card-clickable adds cursor:pointer + the ↗ hover indicator (CSS)
+    // when the card has a personal statement to show; otherwise it's a plain card.
+    <div
+      className={`bento-card${hasStatement ? ' project-card-clickable' : ''}`}
+      style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}
+      onClick={hasStatement ? onClick : undefined}
+      role={hasStatement ? 'button' : undefined}
+      tabIndex={hasStatement ? 0 : undefined}
+      onKeyDown={hasStatement ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } } : undefined}
+      aria-label={hasStatement ? `Open ${project.title} details` : undefined}
+    >
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem' }}>
         <h3 style={{ ...S.serif, fontSize: '1rem', fontWeight: 700, margin: 0, lineHeight: 1.3, flex: 1 }}>
           {project.title}
         </h3>
-        <span style={{
-          ...(live
-            ? { background: '#c45c00', color: '#fff' }
-            : { border: '2px solid #1a1a1a', color: '#1a1a1a' }),
-          padding: '0.15rem 0.55rem',
-          ...S.label, fontSize: '0.58rem', whiteSpace: 'nowrap',
-        }}>
+        <span style={{ ...badgeStyle, padding: '0.15rem 0.55rem', ...S.label, fontSize: '0.58rem', whiteSpace: 'nowrap' }}>
           {project.status}
         </span>
       </div>
@@ -632,8 +689,8 @@ function ProjectCard({ project }) {
         {project.description}
       </p>
 
-      {/* Bullets */}
-      {project.bullets && project.bullets.length > 0 && (
+      {/* Bullets — shown on cards that don't use a personal statement */}
+      {!hasStatement && project.bullets && project.bullets.length > 0 && (
         <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
           {project.bullets.map((b, i) => (
             <li key={i} style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
@@ -642,6 +699,13 @@ function ProjectCard({ project }) {
             </li>
           ))}
         </ul>
+      )}
+
+      {/* "Read more" hint for cards with a personal statement */}
+      {hasStatement && (
+        <p style={{ ...S.label, fontSize: '0.58rem', color: '#c45c00', margin: 0 }}>
+          Click to read the full story
+        </p>
       )}
 
       {/* Stack */}
@@ -656,22 +720,50 @@ function ProjectCard({ project }) {
         ))}
       </div>
 
-      {/* GitHub link */}
-      {project.github && (
-        <a href={project.github} target="_blank" rel="noopener noreferrer"
-          style={{ ...S.label, fontSize: '0.65rem', color: '#1a1a1a', textDecoration: 'none', borderBottom: '2px solid #1a1a1a', paddingBottom: '1px', alignSelf: 'flex-start' }}>
+      {/* GitHub link — only shown on cards without a personal statement (modal handles it otherwise) */}
+      {!hasStatement && project.github && (
+        <a
+          href={project.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={e => e.stopPropagation()} // prevent card click when tapping the link
+          style={{ ...S.label, fontSize: '0.65rem', color: '#1a1a1a', textDecoration: 'none', borderBottom: '2px solid #1a1a1a', paddingBottom: '1px', alignSelf: 'flex-start' }}
+        >
           View on GitHub →
         </a>
       )}
     </div>
   );
-}
+});
 
 // ─── PROJECTS ──────────────────────────────────────────────────────────────────
 
 function ProjectsSection() {
+  // selectedProject holds the project object (or null). We store the object
+  // directly rather than an index so the modal never needs to look up D.projects.
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  // useCallback prevents new function references on every render, keeping
+  // memoised ProjectCards from re-rendering when unrelated state changes.
+  const openModal = useCallback((project) => {
+    setSelectedProject(project);
+    setModalOpen(true);
+  }, []);
+
+  const closeModal = useCallback(() => {
+    setModalOpen(false);
+    // Keep selectedProject in state while the modal's close animation plays
+    // (the dialog element handles its own visibility via isOpen).
+  }, []);
+
   const live      = D.projects.filter(p => p.status === 'LIVE');
   const portfolio = D.projects.filter(p => p.status === 'PORTFOLIO');
+  const initiative = D.projects.filter(p => p.status === 'INITIATIVE');
+
+  // Counts for the subtitle line — derived from data, not hard-coded
+  const liveCount = live.length;
+  const portfolioCount = portfolio.length;
 
   return (
     <section id="projects" className="scroll-section lattice-bg" style={{ padding: '5rem 0' }}>
@@ -681,31 +773,74 @@ function ProjectsSection() {
           Production & Portfolio
         </h2>
         <p style={{ ...S.mono, fontSize: '0.85rem', color: '#767676', marginBottom: '3rem' }}>
-          5 live systems shipped · 4 portfolio projects
+          {liveCount} live {liveCount === 1 ? 'system' : 'systems'} shipped · {portfolioCount} portfolio {portfolioCount === 1 ? 'project' : 'projects'}
         </p>
 
-        {/* LIVE */}
-        <div style={{ marginBottom: '2.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
-            <span style={{ background: '#c45c00', color: '#fff', padding: '0.15rem 0.55rem', ...S.label, fontSize: '0.58rem' }}>LIVE</span>
-            <span style={{ ...S.label, fontSize: '0.65rem', color: '#767676' }}>Production Systems</span>
+        {/* ── LIVE ── */}
+        {live.length > 0 && (
+          <div style={{ marginBottom: '2.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
+              <span style={{ background: '#1a5c3a', color: '#fff', padding: '0.15rem 0.55rem', ...S.label, fontSize: '0.58rem' }}>LIVE</span>
+              <span style={{ ...S.label, fontSize: '0.65rem', color: '#767676' }}>Production Systems</span>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.15rem' }}>
+              {live.map((p) => (
+                <ProjectCard
+                  key={p.title}
+                  project={p}
+                  onClick={() => openModal(p)}
+                />
+              ))}
+            </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.15rem' }}>
-            {live.map((p, i) => <ProjectCard key={i} project={p} />)}
-          </div>
-        </div>
+        )}
 
-        {/* PORTFOLIO */}
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
-            <span style={{ border: '2px solid #1a1a1a', padding: '0.1rem 0.55rem', ...S.label, fontSize: '0.58rem' }}>PORTFOLIO</span>
-            <span style={{ ...S.label, fontSize: '0.65rem', color: '#767676' }}>Academic & Experimental</span>
+        {/* ── PORTFOLIO ── */}
+        {portfolio.length > 0 && (
+          <div style={{ marginBottom: initiative.length > 0 ? '2.5rem' : 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
+              <span style={{ border: '2px solid #1a1a1a', padding: '0.1rem 0.55rem', ...S.label, fontSize: '0.58rem' }}>PORTFOLIO</span>
+              <span style={{ ...S.label, fontSize: '0.65rem', color: '#767676' }}>Academic & Experimental</span>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.15rem' }}>
+              {portfolio.map((p) => (
+                <ProjectCard
+                  key={p.title}
+                  project={p}
+                  onClick={() => openModal(p)}
+                />
+              ))}
+            </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.15rem' }}>
-            {portfolio.map((p, i) => <ProjectCard key={i} project={p} />)}
+        )}
+
+        {/* ── INITIATIVE ── */}
+        {initiative.length > 0 && (
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
+              <span style={{ background: '#4a2d6b', color: '#f8f6f1', padding: '0.15rem 0.55rem', ...S.label, fontSize: '0.58rem' }}>INITIATIVE</span>
+              <span style={{ ...S.label, fontSize: '0.65rem', color: '#767676' }}>Community & Advocacy</span>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.15rem' }}>
+              {initiative.map((p) => (
+                <ProjectCard
+                  key={p.title}
+                  project={p}
+                  onClick={() => openModal(p)}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
+
+      {/* Modal is rendered inside the section but uses native <dialog> top-layer,
+          so its visual position is unaffected by this DOM placement. */}
+      <ProjectModal
+        project={selectedProject}
+        isOpen={modalOpen}
+        onClose={closeModal}
+      />
     </section>
   );
 }
@@ -782,7 +917,7 @@ function ContactSection() {
   const items = [
     { label: 'Email',    href: `mailto:${D.email}`,  display: D.email },
     { label: 'Phone',    href: `tel:${D.phone}`,     display: D.phone },
-    { label: 'LinkedIn', href: D.linkedin,            display: 'linkedin.com/in/phillip-asiimwe', external: true },
+    { label: 'LinkedIn', href: D.linkedin,            display: 'linkedin.com/in/phillip-amanya', external: true },
     { label: 'GitHub',   href: D.github,              display: 'github.com/AmanyaPhillip',        external: true },
   ];
 
@@ -924,29 +1059,71 @@ export default function App() {
   }, []);
 
   return (
-    <>
-      <NavBar
-        activeSection={activeSection}
-        onNav={scrollToSection}
-        onDownload={() => setShowDownloadModal(true)}
-      />
-      <SideNav activeSection={activeSection} onNav={scrollToSection} />
+    <div className="app-container">
+      {/* LEFT PANEL: Fixed hero section with orbital wheel */}
+      <div className="panel-left">
+        <ParticleCanvas width={600} height={600} />
 
-      <main>
-        <HeroSection onNav={scrollToSection} />
-        <ExpertiseSection />
-        <ExperienceSection />
-        <EducationSection />
-        <ProjectsSection />
-        <CommunitySection />
-        <ContactSection />
-      </main>
+        {/* Hero content */}
+        <div style={{ position: 'relative', zIndex: 5, textAlign: 'center' }}>
+          <div className="section-label" style={{ justifyContent: 'center', marginBottom: '1.5rem' }}>
+            Technical Organicist
+          </div>
 
-      <Footer />
+          <h1 style={{ ...S.serif, fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontWeight: 700, lineHeight: 0.95, letterSpacing: '-0.02em', margin: '0 0 1.5rem' }}>
+            Phillip
+            <br />
+            <span style={{ color: '#c45c00' }}>Asiimwe</span>
+          </h1>
 
+          {/* Orbital Wheel */}
+          <div style={{ marginBottom: '2rem' }}>
+            <OrbitalWheel onSegmentClick={scrollToSection} />
+          </div>
+
+          <p style={{ ...S.label, fontSize: '0.65rem', color: '#767676', marginBottom: '1.5rem' }}>
+            Click an orbit node to navigate
+          </p>
+
+          {/* CTA Button */}
+          <button
+            onClick={() => setShowDownloadModal(true)}
+            style={{
+              background: '#1a1a1a', color: '#f8f6f1', border: 'none',
+              padding: '0.5rem 1.25rem',
+              ...S.label, fontSize: '0.68rem',
+              cursor: 'pointer',
+              boxShadow: '3px 3px 0px #c45c00',
+              transition: 'transform 0.1s ease, box-shadow 0.1s ease',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translate(-1px,-1px)'; e.currentTarget.style.boxShadow = '4px 4px 0px #c45c00'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '3px 3px 0px #c45c00'; }}
+          >
+            Download CV
+          </button>
+        </div>
+      </div>
+
+      {/* RIGHT PANEL: Scrollable content */}
+      <div className="panel-right">
+        <main>
+          <ExpertiseSection />
+          <ExperienceSection />
+          <EducationSection />
+          <ProjectsSection />
+          <CommunitySection />
+          <ContactSection />
+        </main>
+        <Footer />
+      </div>
+
+      {/* Theme Switcher */}
+      <ThemeSwitcher />
+
+      {/* Download Modal */}
       {showDownloadModal && (
         <DownloadModal onDownload={handleDownload} onClose={() => setShowDownloadModal(false)} />
       )}
-    </>
+    </div>
   );
 }

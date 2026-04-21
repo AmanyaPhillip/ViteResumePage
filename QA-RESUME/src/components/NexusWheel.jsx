@@ -36,11 +36,11 @@ const f = (n) => n.toFixed(2);
 export default function NexusWheel({ onSegmentClick }) {
   const [hovered, setHovered] = useState(null);
 
-  const SIZE   = 300;
+  const SIZE   = 420;
   const cx     = SIZE / 2;
   const cy     = SIZE / 2;
-  const rOuter = 132;
-  const rInner = 50;
+  const rOuter = 185;
+  const rInner = 70;
   const GAP    = 3; // degrees of gap between segments
 
   return (
@@ -51,6 +51,12 @@ export default function NexusWheel({ onSegmentClick }) {
       aria-label="Navigate to a section"
       style={{ display: 'block' }}
     >
+      <defs>
+        <clipPath id="hubClip">
+          <circle cx={cx} cy={cy} r={rInner - 6} />
+        </clipPath>
+      </defs>
+
       {SEGMENTS.map((seg, i) => {
         const a1      = i * 60 + GAP / 2;
         const a2      = (i + 1) * 60 - GAP / 2;
@@ -80,7 +86,7 @@ export default function NexusWheel({ onSegmentClick }) {
               textAnchor="middle"
               dominantBaseline="middle"
               fill="#f8f6f1"
-              fontSize="9"
+              fontSize="12"
               fontFamily="'Space Grotesk', sans-serif"
               fontWeight="700"
               letterSpacing="0.1"
@@ -101,33 +107,15 @@ export default function NexusWheel({ onSegmentClick }) {
         stroke="#1a1a1a"
         strokeWidth="2.5"
       />
-      <text
-        x={cx}
-        y={cy - 6}
-        textAnchor="middle"
-        dominantBaseline="middle"
-        fontSize="14"
-        fontFamily="'Noto Serif', serif"
-        fontWeight="700"
-        fill="#1a1a1a"
-        style={{ userSelect: 'none' }}
-      >
-        PA
-      </text>
-      <text
-        x={cx}
-        y={cy + 10}
-        textAnchor="middle"
-        dominantBaseline="middle"
-        fontSize="6"
-        fontFamily="'Space Grotesk', sans-serif"
-        fontWeight="600"
-        fill="#767676"
-        letterSpacing="1.5"
-        style={{ userSelect: 'none' }}
-      >
-        NAVIGATE
-      </text>
+      <image
+        href="/ViteResumePage/profile.jpg"
+        x={cx - (rInner - 6)}
+        y={cy - (rInner - 6)}
+        width={(rInner - 6) * 2}
+        height={(rInner - 6) * 2}
+        clipPath="url(#hubClip)"
+        preserveAspectRatio="xMidYMid slice"
+      />
     </svg>
   );
 }

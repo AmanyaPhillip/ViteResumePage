@@ -513,6 +513,7 @@ body {
   .panel-right {
     width: 100vw;
     overflow-y: auto;
+    padding-top: 1rem;
   }
 
   body {
@@ -524,4 +525,13 @@ body {
     height: auto;
     width: 100vw;
   }
+
+  /* Mobile font scaling */
+  h1 { font-size: clamp(1.75rem, 5vw, 2.5rem) !important; }
+  h2 { font-size: clamp(1.5rem, 4vw, 2rem) !important; }
+  h3 { font-size: clamp(1.1rem, 3vw, 1.5rem) !important; }
+
+  /* Mobile padding adjustments */
+  section { padding: 3rem 1rem !important; }
+  .bento-card { padding: 1.25rem !important; }
 }

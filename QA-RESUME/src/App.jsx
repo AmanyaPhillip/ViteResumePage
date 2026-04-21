@@ -483,6 +483,30 @@ function ExpertiseSection() {
               </div>
             </div>
           ))}
+
+          {/* AI Governance Callout */}
+          <div
+            style={{
+              background: 'linear-gradient(135deg, #4a2d6b 0%, #6b3d8e 100%)',
+              border: '2px solid #00d9ff',
+              boxShadow: '6px 6px 0px #00d9ff',
+              padding: '2rem',
+              gridColumn: 'span auto',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1rem',
+            }}
+          >
+            <div style={{ ...S.label, fontSize: '0.62rem', color: '#00d9ff' }}>
+              Focus Area
+            </div>
+            <h3 style={{ ...S.serif, fontSize: '1.25rem', fontWeight: 700, margin: 0, color: '#f8f6f1' }}>
+              AI Governance
+            </h3>
+            <p style={{ ...S.mono, fontSize: '0.85rem', lineHeight: 1.6, margin: 0, color: '#e8d5f2' }}>
+              Exploring responsible AI deployment, agentic systems oversight, and human-in-the-loop frameworks for enterprise adoption.
+            </p>
+          </div>
         </div>
       </div>
     </section>
@@ -1078,7 +1102,10 @@ export default function App() {
 
           {/* Orbital Wheel */}
           <div style={{ marginBottom: '2rem' }}>
-            <OrbitalWheel onSegmentClick={scrollToSection} />
+            <OrbitalWheel
+              onSegmentClick={scrollToSection}
+              profileImage={`${import.meta.env.BASE_URL}profile.jpg`}
+            />
           </div>
 
           <p style={{ ...S.label, fontSize: '0.65rem', color: '#767676', marginBottom: '1.5rem' }}>

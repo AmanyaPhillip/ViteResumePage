@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const NODES = [
   { id: 'expertise',  label: 'Expertise'  },
@@ -9,8 +9,9 @@ const NODES = [
   { id: 'education',  label: 'Education'  },
 ];
 
-function OrbitalWheel({ onSegmentClick }) {
+function OrbitalWheel({ onSegmentClick, profileImage }) {
   const [hovered, setHovered] = useState(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const SIZE = 420;
   const cx = SIZE / 2;
@@ -48,7 +49,14 @@ function OrbitalWheel({ onSegmentClick }) {
           opacity="0.3"
         />
 
-        {/* Center hub with photo placeholder or initials */}
+        {/* Clipping path for circular photo */}
+        <defs>
+          <clipPath id="hubClip">
+            <circle cx={cx} cy={cy} r={hubRadius - 3} />
+          </clipPath>
+        </defs>
+
+        {/* Center hub background */}
         <circle
           cx={cx}
           cy={cy}
@@ -57,18 +65,33 @@ function OrbitalWheel({ onSegmentClick }) {
           stroke="var(--border)"
           strokeWidth="3"
         />
-        <text
-          x={cx}
-          y={cy}
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fontSize="32"
-          fontWeight="700"
-          fill="var(--surface)"
-          fontFamily="var(--font-serif)"
-        >
-          PA
-        </text>
+
+        {/* Profile image or initials */}
+        {profileImage && imageLoaded ? (
+          <image
+            x={cx - hubRadius + 3}
+            y={cy - hubRadius + 3}
+            width={hubRadius * 2 - 6}
+            height={hubRadius * 2 - 6}
+            href={profileImage}
+            clipPath="url(#hubClip)"
+            onLoad={() => setImageLoaded(true)}
+            onError={() => setImageLoaded(false)}
+          />
+        ) : (
+          <text
+            x={cx}
+            y={cy}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize="32"
+            fontWeight="700"
+            fill="var(--surface)"
+            fontFamily="var(--font-serif)"
+          >
+            PA
+          </text>
+        )}
 
         {/* Orbital nodes */}
         {NODES.map((node, idx) => {

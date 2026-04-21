@@ -1052,15 +1052,18 @@ export default function App() {
   const [activeSection, setActiveSection]       = useState('hero');
   const [showDownloadModal, setShowDownloadModal] = useState(false);
 
-  // Track active section via IntersectionObserver
+  // Track active section via IntersectionObserver (right panel scroll root)
   useEffect(() => {
-    const ids = ['hero', ...NAV_SECTIONS];
+    const rightPanel = document.querySelector('.panel-right');
+    if (!rightPanel) return;
+
+    const ids = [...NAV_SECTIONS]; // Exclude 'hero' on desktop since it's in left panel
     const observers = ids.map(id => {
       const el = document.getElementById(id);
       if (!el) return null;
       const obs = new IntersectionObserver(
         ([entry]) => { if (entry.isIntersecting) setActiveSection(id); },
-        { threshold: 0.25, rootMargin: '-64px 0px 0px 0px' }
+        { root: rightPanel, threshold: 0.3, rootMargin: '0px 0px -50% 0px' }
       );
       obs.observe(el);
       return obs;
@@ -1069,7 +1072,16 @@ export default function App() {
   }, []);
 
   const scrollToSection = useCallback(id => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const el = document.getElementById(id);
+    if (!el) return;
+    const rightPanel = document.querySelector('.panel-right');
+    if (rightPanel && window.innerWidth >= 900) {
+      // Desktop: scroll right panel
+      rightPanel.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
+    } else {
+      // Mobile: normal scroll
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }, []);
 
   const handleDownload = useCallback(() => {

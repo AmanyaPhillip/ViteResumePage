@@ -37,12 +37,12 @@ function StatusBadge({ status }) {
 function StackTag({ tech }) {
   return (
     <span style={{
-      border: '1.5px solid #ccc',
+      border: '1.5px solid var(--muted)',
       padding: '0.2rem 0.6rem',
       ...label, fontSize: '0.62rem',
-      color: '#555',
+      color: 'var(--muted)',
       fontWeight: 600,
-      background: '#fff',
+      background: 'var(--surface-alt)',
     }}>
       {tech}
     </span>
@@ -171,7 +171,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
               fontStyle: 'italic',
               margin: '0 0 1.75rem',
               paddingBottom: '1.5rem',
-              borderBottom: '1.5px solid #e0ddd6',
+              borderBottom: '1.5px solid var(--muted)',
             }}>
               {project.description}
             </p>
@@ -192,7 +192,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                   ...mono,
                   fontSize: '0.92rem',
                   lineHeight: 1.85,
-                  color: '#333',
+                  color: 'var(--brand)',
                   margin: i === 0 ? '0 0 1rem' : '0 0 1rem',
                 }}>
                   {para.trim()}
@@ -210,7 +210,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                   {project.bullets.map((b, i) => (
                     <li key={i} style={{ display: 'flex', gap: '0.6rem', alignItems: 'flex-start' }}>
                       <span style={{ color: 'var(--accent)', fontSize: '0.6rem', marginTop: '0.45rem', flexShrink: 0 }}>▸</span>
-                      <span style={{ ...mono, fontSize: '0.88rem', lineHeight: 1.65, color: '#444' }}>{b}</span>
+                      <span style={{ ...mono, fontSize: '0.88rem', lineHeight: 1.65, color: 'var(--muted)' }}>{b}</span>
                     </li>
                   ))}
                 </ul>

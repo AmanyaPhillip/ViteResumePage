@@ -1,11 +1,9 @@
 import { useEffect, useRef } from 'react';
-import { useTheme } from '../context/ThemeContext';
 
-export default function ParticleCanvas({ width = 600, height = 600 }) {
+export default function ParticleCanvas({ theme, width = 600, height = 600 }) {
   const canvasRef = useRef(null);
   const particlesRef = useRef([]);
   const animationIdRef = useRef(null);
-  const { currentThemeObj } = useTheme();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -34,9 +32,7 @@ export default function ParticleCanvas({ width = 600, height = 600 }) {
       particlesRef.current = particles;
     };
 
-    // Get theme color (accent)
-    const themeAccent = currentThemeObj['--accent'];
-    const accentColor = themeAccent || '#c45c00';
+    const accentColor = theme?.accent || '#c45c00';
 
     // Animation loop
     const animate = () => {
@@ -93,7 +89,7 @@ export default function ParticleCanvas({ width = 600, height = 600 }) {
         cancelAnimationFrame(animationIdRef.current);
       }
     };
-  }, [width, height, currentThemeObj]);
+  }, [width, height, theme]);
 
   return (
     <canvas

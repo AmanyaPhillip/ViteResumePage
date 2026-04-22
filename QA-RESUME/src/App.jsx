@@ -267,191 +267,130 @@ const S = {
   },
 };
 
+// ─── SIDEBAR SECTIONS ──────────────────────────────────────────────────────────
+
+const SIDEBAR_SECTIONS = [
+  { id: 'expertise',  label: 'Expertise'  },
+  { id: 'experience', label: 'Experience' },
+  { id: 'projects',   label: 'Projects'   },
+  { id: 'community',  label: 'Community'  },
+  { id: 'contact',    label: 'Contact'    },
+  { id: 'education',  label: 'Education'  },
+];
+
 // ─── NAVBAR ────────────────────────────────────────────────────────────────────
 
-function NavBar({ activeSection, onNav, onDownload }) {
+function NavBar({ onNav, onMobileMenu, isMobile, th }) {
   return (
-    <nav style={{
-      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
-      background: 'rgba(248,246,241,0.92)',
-      backdropFilter: 'blur(16px)',
-      borderBottom: '2px solid #1a1a1a',
-      height: '64px',
-    }}>
-      <div style={{
-        maxWidth: '1200px', margin: '0 auto', padding: '0 1.5rem',
-        height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      }}>
-        {/* Wordmark */}
+    <nav className="site-navbar" style={{ background: th.navBg, borderBottom: `1px solid ${th.navBorder}` }}>
+      <div className="site-navbar-inner">
         <button
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, textAlign: 'left' }}
+          className="phillip-pill"
+          onClick={() => isMobile ? onMobileMenu() : onNav(null)}
+          aria-label="Go to overview"
         >
-          <div style={{ ...S.serif, fontSize: '1.05rem', fontWeight: 700, lineHeight: 1.15 }}>
-            P. Asiimwe
-          </div>
-          <div style={{ ...S.label, fontSize: '0.58rem', color: '#c45c00' }}>
-            Technical Organicist
-          </div>
+          <span className="pill-name" style={{ ...th.hf }}>
+            Phillip Asiimwe
+          </span>
         </button>
-
-        {/* Section links */}
-        <div className="nav-links" style={{ gap: '1.5rem', alignItems: 'center' }}>
-          {NAV_SECTIONS.map(s => (
-            <button
-              key={s}
-              onClick={() => onNav(s)}
-              style={{
-                background: 'none', border: 'none', cursor: 'pointer',
-                ...S.label, fontSize: '0.65rem',
-                color: activeSection === s ? '#c45c00' : '#767676',
-                borderBottom: activeSection === s ? '2px solid #c45c00' : '2px solid transparent',
-                paddingBottom: '2px',
-                transition: 'color 0.15s, border-color 0.15s',
-              }}
-            >
-              {s}
-            </button>
-          ))}
-        </div>
-
-        {/* CTA */}
-        <button
-          onClick={onDownload}
-          style={{
-            background: '#1a1a1a', color: '#f8f6f1', border: 'none',
-            padding: '0.5rem 1.25rem',
-            ...S.label, fontSize: '0.68rem',
-            cursor: 'pointer',
-            boxShadow: '3px 3px 0px #c45c00',
-            transition: 'transform 0.1s ease, box-shadow 0.1s ease',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.transform = 'translate(-1px,-1px)'; e.currentTarget.style.boxShadow = '4px 4px 0px #c45c00'; }}
-          onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '3px 3px 0px #c45c00'; }}
-        >
-          Download CV
-        </button>
+        <ThemeSwitcher />
       </div>
     </nav>
   );
 }
 
-// ─── SIDE NAV ──────────────────────────────────────────────────────────────────
+// ─── MOBILE SIDEBAR ────────────────────────────────────────────────────────────
 
-function SideNav({ activeSection, onNav }) {
-  const [hov, setHov] = useState(null);
+function MobileSidebar({ open, active, onNav, onClose, th }) {
   return (
-    <div className="side-nav">
-      {NAV_SECTIONS.map(s => (
-        <div key={s} style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+    <>
+      <div
+        className="mobile-sidebar-backdrop"
+        style={{ opacity: open ? 1 : 0, pointerEvents: open ? 'auto' : 'none' }}
+        onClick={onClose}
+      />
+      <div
+        className={`mobile-sidebar${open ? ' open' : ''}`}
+        style={{ background: th.panelBg, borderRight: `1px solid ${th.divider}` }}
+        role="navigation"
+        aria-label="Section navigation"
+        onClick={e => e.stopPropagation()}
+      >
+        {SIDEBAR_SECTIONS.map(({ id, label }) => (
           <button
-            className={`side-nav-dot${activeSection === s ? ' active' : ''}`}
-            onClick={() => onNav(s)}
-            onMouseEnter={() => setHov(s)}
-            onMouseLeave={() => setHov(null)}
-            aria-label={s}
-          />
-          {hov === s && (
-            <span style={{
-              position: 'absolute', left: '1.25rem',
-              background: '#1a1a1a', color: '#f8f6f1',
-              padding: '0.2rem 0.6rem',
-              ...S.label, fontSize: '0.6rem',
-              whiteSpace: 'nowrap', pointerEvents: 'none',
-            }}>
-              {s}
-            </span>
-          )}
-        </div>
-      ))}
-    </div>
+            key={id}
+            className={`sidebar-nav-btn${active === id ? ' active' : ''}`}
+            onClick={() => onNav(id)}
+            style={active === id
+              ? { background: th.accent, borderColor: th.accent, color: '#fff' }
+              : { borderColor: th.muted, color: th.muted }}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+    </>
   );
 }
 
-// ─── HERO ──────────────────────────────────────────────────────────────────────
+// ─── HERO INTRO ────────────────────────────────────────────────────────────────
 
-function HeroSection({ onNav }) {
+function HeroIntro({ th, onDownload }) {
   return (
-    <section
-      id="hero"
-      className="lattice-bg scroll-section"
-      style={{ minHeight: '100vh', paddingTop: '64px', display: 'flex', alignItems: 'center' }}
-    >
-      <div
-        className="hero-grid"
-        style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 1.5rem', width: '100%' }}
-      >
-        {/* ── Left: Text ── */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          <div className="section-label">Technical Organicist</div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      <div className="section-label" style={{ color: th.muted }}>AI Enablement Specialist</div>
 
-          <h1 style={{ ...S.serif, fontSize: 'clamp(3rem, 7vw, 5.5rem)', fontWeight: 700, lineHeight: 0.95, letterSpacing: '-0.02em', margin: 0 }}>
-            Phillip
-            <br />
-            <span style={{ color: '#c45c00' }}>Asiimwe</span>
-          </h1>
+      <h1 style={{ ...th.hf, fontSize: 'clamp(2.8rem, 5vw, 4.2rem)', lineHeight: 0.95, letterSpacing: '-0.02em', margin: 0, color: th.text }}>
+        Phillip
+        <br />
+        <span style={{ color: th.accent }}>Asiimwe</span>
+      </h1>
 
-          {/* Title tags */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-            {D.titles.map(t => (
-              <span key={t} style={{
-                border: '2px solid #1a1a1a',
-                padding: '0.25rem 0.75rem',
-                ...S.label, fontSize: '0.65rem',
-              }}>
-                {t}
-              </span>
-            ))}
-          </div>
-
-          {/* Location + status */}
-          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
-            <span style={{ ...S.mono, fontSize: '0.82rem', color: '#767676' }}>
-              📍 {D.location}
-            </span>
-            <span style={{
-              background: '#1a5c3a', color: '#f8f6f1',
-              padding: '0.2rem 0.65rem',
-              ...S.label, fontSize: '0.6rem',
-            }}>
-              {D.availability}
-            </span>
-          </div>
-
-          {/* Summary */}
-          <p style={{ ...S.mono, fontSize: '0.9rem', lineHeight: 1.75, color: '#444', maxWidth: '520px', margin: 0 }}>
-            {D.summary}
-          </p>
-
-          {/* Contact row */}
-          <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
-            {[
-              { label: 'Email',    href: `mailto:${D.email}` },
-              { label: 'Phone',    href: `tel:${D.phone}` },
-              { label: 'LinkedIn', href: D.linkedin, external: true },
-              { label: 'GitHub',   href: D.github,   external: true },
-            ].map(({ label, href, external }) => (
-              <a key={label} href={href}
-                className="contact-link"
-                {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-              >
-                {label}
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* ── Right: Photo + Wheel ── */}
-        <div className="hero-right">
-          {/* Orbital Wheel with photo in hub */}
-          <OrbitalWheel onSegmentClick={onNav} />
-
-          <p style={{ ...S.label, fontSize: '0.58rem', color: '#767676', textAlign: 'center' }}>
-            Click an orbit node to navigate
-          </p>
-        </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+        {D.titles.map(t => (
+          <span key={t} style={{ border: `2px solid ${th.text}`, padding: '0.25rem 0.75rem', ...S.label, fontSize: '0.65rem', color: th.text }}>
+            {t}
+          </span>
+        ))}
       </div>
-    </section>
+
+      <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
+        <span style={{ ...S.mono, fontSize: '0.82rem', color: th.muted }}>📍 {D.location}</span>
+        <span style={{ background: th.green, color: '#f8f6f1', padding: '0.2rem 0.65rem', ...S.label, fontSize: '0.6rem' }}>
+          {D.availability}
+        </span>
+      </div>
+
+      <p style={{ ...S.mono, fontSize: '0.9rem', lineHeight: 1.75, color: th.muted, maxWidth: '520px', margin: 0 }}>
+        {D.summary}
+      </p>
+
+      <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+        {[
+          { label: 'Email',    href: `mailto:${D.email}` },
+          { label: 'Phone',    href: `tel:${D.phone}` },
+          { label: 'LinkedIn', href: D.linkedin, external: true },
+          { label: 'GitHub',   href: D.github,   external: true },
+        ].map(({ label, href, external }) => (
+          <a key={label} href={href} className="contact-link"
+            style={{ borderColor: th.text, color: th.text }}
+            {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+            {label}
+          </a>
+        ))}
+        <button
+          onClick={onDownload}
+          className="contact-link"
+          style={{ borderColor: th.text, color: th.text, background: 'none', cursor: 'pointer' }}
+        >
+          Download CV
+        </button>
+      </div>
+
+      <p style={{ ...S.label, fontSize: '0.6rem', color: th.muted, marginTop: '0.5rem' }}>
+        Click an orbit node to explore →
+      </p>
+    </div>
   );
 }
 
@@ -515,9 +454,9 @@ function ExpertiseSection() {
 
 // ─── EXPERIENCE ────────────────────────────────────────────────────────────────
 
-function ExperienceSection() {
+function ExperienceSection({ th }) {
   return (
-    <section id="experience" className="scroll-section" style={{ background: '#f8f6f1', padding: '5rem 0' }}>
+    <section id="experience" style={{ padding: '3rem 0' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1.5rem' }}>
         <div className="section-label">Experience</div>
         <h2 style={{ ...S.sectionHeading, fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}>
@@ -532,10 +471,10 @@ function ExperienceSection() {
                 {/* Timeline dot */}
                 <div
                   className="timeline-dot"
-                  style={{ background: i === 0 ? '#c45c00' : '#1a1a1a' }}
+                  style={{ background: i === 0 ? th.accent : th.text }}
                 />
 
-                <div className="bento-card" style={{ padding: '2rem' }}>
+                <div className={th.card} style={{ padding: '2rem' }}>
                   {/* Header */}
                   <div style={{
                     display: 'flex', justifyContent: 'space-between',
@@ -545,12 +484,12 @@ function ExperienceSection() {
                       <h3 style={{ ...S.serif, fontSize: '1.35rem', fontWeight: 700, margin: '0 0 0.3rem' }}>
                         {job.role}
                       </h3>
-                      <div style={{ ...S.mono, fontSize: '0.85rem', color: '#c45c00', fontWeight: 700 }}>
+                      <div style={{ ...S.mono, fontSize: '0.85rem', color: th.accent, fontWeight: 700 }}>
                         {job.company} · {job.location}
                       </div>
                     </div>
                     <span style={{
-                      border: '2px solid #1a1a1a', padding: '0.25rem 0.75rem',
+                      border: `2px solid ${th.text}`, padding: '0.25rem 0.75rem',
                       ...S.label, fontSize: '0.65rem', whiteSpace: 'nowrap',
                     }}>
                       {job.period}
@@ -562,7 +501,7 @@ function ExperienceSection() {
                     {job.points.map((p, j) => (
                       <div key={j} style={{ display: 'flex', gap: '0.65rem', alignItems: 'flex-start' }}>
                         <span style={{ color: '#c45c00', fontSize: '0.6rem', marginTop: '0.5rem', flexShrink: 0 }}>▸</span>
-                        <p style={{ ...S.mono, fontSize: '0.865rem', lineHeight: 1.7, margin: 0, color: '#333' }}>
+                        <p style={{ ...S.mono, fontSize: '0.865rem', lineHeight: 1.7, margin: 0, color: th.text }}>
                           <strong style={{ fontWeight: 700 }}>{p.label}:</strong> {p.text}
                         </p>
                       </div>
@@ -580,9 +519,9 @@ function ExperienceSection() {
 
 // ─── EDUCATION ─────────────────────────────────────────────────────────────────
 
-function EducationSection() {
+function EducationSection({ th }) {
   return (
-    <section id="education" className="scroll-section" style={{ background: '#f0ede6', padding: '5rem 0' }}>
+    <section id="education" style={{ padding: '3rem 0' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1.5rem' }}>
         <div className="section-label">Education</div>
         <h2 style={{ ...S.sectionHeading, fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}>
@@ -591,7 +530,7 @@ function EducationSection() {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '1.25rem' }}>
           {/* Degree card */}
-          <div className="bento-card" style={{ padding: '2rem' }}>
+          <div className={th.card} style={{ padding: '2rem' }}>
             <div style={{ ...S.label, fontSize: '0.62rem', color: '#c45c00', marginBottom: '0.75rem' }}>
               Degree
             </div>
@@ -601,23 +540,23 @@ function EducationSection() {
             <div style={{ ...S.mono, fontSize: '0.9rem', color: '#c45c00', fontWeight: 700, marginBottom: '0.3rem' }}>
               {D.education.school}
             </div>
-            <div style={{ ...S.mono, fontSize: '0.8rem', color: '#767676', marginBottom: '1rem' }}>
+            <div style={{ ...S.mono, fontSize: '0.8rem', color: th.muted, marginBottom: '1rem' }}>
               {D.education.location} · {D.education.period}
             </div>
             <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-              <span style={{ background: '#1a1a1a', color: '#f8f6f1', padding: '0.2rem 0.65rem', ...S.label, fontSize: '0.6rem' }}>
+              <span style={{ background: th.text, color: th.bg, padding: '0.2rem 0.65rem', ...S.label, fontSize: '0.6rem' }}>
                 {D.education.distinction}
               </span>
-              <span style={{ border: '2px solid #1a1a1a', padding: '0.15rem 0.65rem', ...S.label, fontSize: '0.6rem' }}>
+              <span style={{ border: `2px solid ${th.text}`, padding: '0.15rem 0.65rem', ...S.label, fontSize: '0.6rem' }}>
                 {D.education.gpa}
               </span>
             </div>
-            <div style={{ ...S.label, fontSize: '0.6rem', color: '#767676', marginBottom: '0.5rem' }}>
+            <div style={{ ...S.label, fontSize: '0.6rem', color: th.muted, marginBottom: '0.5rem' }}>
               Key Coursework
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
               {D.education.courses.map(c => (
-                <span key={c} style={{ border: '1.5px solid #ccc', padding: '0.15rem 0.55rem', ...S.label, fontSize: '0.58rem', color: '#444', background: '#fff' }}>
+                <span key={c} style={{ border: `1.5px solid ${th.muted}`, padding: '0.15rem 0.55rem', ...S.label, fontSize: '0.58rem', color: th.muted, background: 'transparent' }}>
                   {c}
                 </span>
               ))}
@@ -628,14 +567,14 @@ function EducationSection() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             {/* Certifications */}
             {D.certifications.map((cert, i) => (
-              <div key={i} className="bento-card" style={{ padding: '1.5rem' }}>
+              <div key={i} className={th.card} style={{ padding: '1.5rem' }}>
                 <div style={{ ...S.label, fontSize: '0.62rem', color: '#c45c00', marginBottom: '0.5rem' }}>
                   Certificate · {cert.year}
                 </div>
                 <div style={{ ...S.serif, fontSize: '1rem', fontWeight: 700, lineHeight: 1.3, marginBottom: '0.25rem' }}>
                   {cert.name}
                 </div>
-                <div style={{ ...S.mono, fontSize: '0.8rem', color: '#767676', marginBottom: cert.link ? '0.75rem' : 0 }}>
+                <div style={{ ...S.mono, fontSize: '0.8rem', color: th.muted, marginBottom: cert.link ? '0.75rem' : 0 }}>
                   {cert.issuer}
                 </div>
                 {cert.link && (
@@ -675,7 +614,7 @@ function EducationSection() {
 // Memoised so the grid doesn't re-render cards that haven't changed when the
 // modal open/close state updates in the parent ProjectsSection.
 
-const ProjectCard = memo(function ProjectCard({ project, onClick }) {
+const ProjectCard = memo(function ProjectCard({ project, onClick, th }) {
   const hasStatement = Boolean(project.personalStatement);
 
   // Badge style varies by status to match the modal's StatusBadge colour scheme
@@ -683,14 +622,14 @@ const ProjectCard = memo(function ProjectCard({ project, onClick }) {
     if (project.status === 'LIVE')       return { background: '#1a5c3a', color: '#fff' };
     if (project.status === 'INITIATIVE') return { background: '#4a2d6b', color: '#f8f6f1' };
     // PORTFOLIO — orange outline (not filled, to distinguish from LIVE)
-    return { border: '2px solid #1a1a1a', color: '#1a1a1a' };
+    return { border: `2px solid ${th?.text || '#1a1a1a'}`, color: th?.text || '#1a1a1a' };
   })();
 
   return (
     // project-card-clickable adds cursor:pointer + the ↗ hover indicator (CSS)
     // when the card has a personal statement to show; otherwise it's a plain card.
     <div
-      className={`bento-card${hasStatement ? ' project-card-clickable' : ''}`}
+      className={`${th?.card || 'bento-card'}${hasStatement ? ' project-card-clickable' : ''}`}
       style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}
       onClick={hasStatement ? onClick : undefined}
       role={hasStatement ? 'button' : undefined}
@@ -709,7 +648,7 @@ const ProjectCard = memo(function ProjectCard({ project, onClick }) {
       </div>
 
       {/* Description */}
-      <p style={{ ...S.mono, fontSize: '0.82rem', lineHeight: 1.65, margin: 0, color: '#444' }}>
+      <p style={{ ...S.mono, fontSize: '0.82rem', lineHeight: 1.65, margin: 0, color: th.muted }}>
         {project.description}
       </p>
 
@@ -719,7 +658,7 @@ const ProjectCard = memo(function ProjectCard({ project, onClick }) {
           {project.bullets.map((b, i) => (
             <li key={i} style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
               <span style={{ color: '#c45c00', fontSize: '0.6rem', marginTop: '0.35rem', flexShrink: 0 }}>▸</span>
-              <span style={{ ...S.mono, fontSize: '0.78rem', lineHeight: 1.55, color: '#555' }}>{b}</span>
+              <span style={{ ...S.mono, fontSize: '0.78rem', lineHeight: 1.55, color: th.muted }}>{b}</span>
             </li>
           ))}
         </ul>
@@ -736,8 +675,8 @@ const ProjectCard = memo(function ProjectCard({ project, onClick }) {
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: 'auto', paddingTop: '0.25rem' }}>
         {project.stack.map(s => (
           <span key={s} style={{
-            border: '1.5px solid #ccc', padding: '0.15rem 0.55rem',
-            ...S.label, fontSize: '0.6rem', color: '#555', fontWeight: 600,
+            border: `1.5px solid ${th.muted}`, padding: '0.15rem 0.55rem',
+            ...S.label, fontSize: '0.6rem', color: th.muted, fontWeight: 600,
           }}>
             {s}
           </span>
@@ -751,7 +690,7 @@ const ProjectCard = memo(function ProjectCard({ project, onClick }) {
           target="_blank"
           rel="noopener noreferrer"
           onClick={e => e.stopPropagation()} // prevent card click when tapping the link
-          style={{ ...S.label, fontSize: '0.65rem', color: '#1a1a1a', textDecoration: 'none', borderBottom: '2px solid #1a1a1a', paddingBottom: '1px', alignSelf: 'flex-start' }}
+          style={{ ...S.label, fontSize: '0.65rem', color: th.text, textDecoration: 'none', borderBottom: `2px solid ${th.text}`, paddingBottom: '1px', alignSelf: 'flex-start' }}
         >
           View on GitHub →
         </a>
@@ -762,7 +701,7 @@ const ProjectCard = memo(function ProjectCard({ project, onClick }) {
 
 // ─── PROJECTS ──────────────────────────────────────────────────────────────────
 
-function ProjectsSection() {
+function ProjectsSection({ th }) {
   // selectedProject holds the project object (or null). We store the object
   // directly rather than an index so the modal never needs to look up D.projects.
   const [selectedProject, setSelectedProject] = useState(null);
@@ -796,7 +735,7 @@ function ProjectsSection() {
         <h2 style={{ ...S.sectionHeading, fontSize: 'clamp(2rem, 4vw, 3.5rem)', marginBottom: '0.5rem' }}>
           Production & Portfolio
         </h2>
-        <p style={{ ...S.mono, fontSize: '0.85rem', color: '#767676', marginBottom: '3rem' }}>
+        <p style={{ ...S.mono, fontSize: '0.85rem', color: th.muted, marginBottom: '3rem' }}>
           {liveCount} live {liveCount === 1 ? 'system' : 'systems'} shipped · {portfolioCount} portfolio {portfolioCount === 1 ? 'project' : 'projects'}
         </p>
 
@@ -805,13 +744,14 @@ function ProjectsSection() {
           <div style={{ marginBottom: '2.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
               <span style={{ background: '#1a5c3a', color: '#fff', padding: '0.15rem 0.55rem', ...S.label, fontSize: '0.58rem' }}>LIVE</span>
-              <span style={{ ...S.label, fontSize: '0.65rem', color: '#767676' }}>Production Systems</span>
+              <span style={{ ...S.label, fontSize: '0.65rem', color: th.muted }}>Production Systems</span>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.15rem' }}>
               {live.map((p) => (
                 <ProjectCard
                   key={p.title}
                   project={p}
+                  th={th}
                   onClick={() => openModal(p)}
                 />
               ))}
@@ -823,14 +763,15 @@ function ProjectsSection() {
         {portfolio.length > 0 && (
           <div style={{ marginBottom: initiative.length > 0 ? '2.5rem' : 0 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
-              <span style={{ border: '2px solid #1a1a1a', padding: '0.1rem 0.55rem', ...S.label, fontSize: '0.58rem' }}>PORTFOLIO</span>
-              <span style={{ ...S.label, fontSize: '0.65rem', color: '#767676' }}>Academic & Experimental</span>
+              <span style={{ border: `2px solid ${th.text}`, padding: '0.1rem 0.55rem', ...S.label, fontSize: '0.58rem', color: th.text }}>PORTFOLIO</span>
+              <span style={{ ...S.label, fontSize: '0.65rem', color: th.muted }}>Academic & Experimental</span>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.15rem' }}>
               {portfolio.map((p) => (
                 <ProjectCard
                   key={p.title}
                   project={p}
+                  th={th}
                   onClick={() => openModal(p)}
                 />
               ))}
@@ -843,13 +784,14 @@ function ProjectsSection() {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
               <span style={{ background: '#4a2d6b', color: '#f8f6f1', padding: '0.15rem 0.55rem', ...S.label, fontSize: '0.58rem' }}>INITIATIVE</span>
-              <span style={{ ...S.label, fontSize: '0.65rem', color: '#767676' }}>Community & Advocacy</span>
+              <span style={{ ...S.label, fontSize: '0.65rem', color: th.muted }}>Community & Advocacy</span>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.15rem' }}>
               {initiative.map((p) => (
                 <ProjectCard
                   key={p.title}
                   project={p}
+                  th={th}
                   onClick={() => openModal(p)}
                 />
               ))}
@@ -937,7 +879,7 @@ function CommunitySection() {
 
 // ─── CONTACT ───────────────────────────────────────────────────────────────────
 
-function ContactSection() {
+function ContactSection({ th }) {
   const items = [
     { label: 'Email',    href: `mailto:${D.email}`,  display: D.email },
     { label: 'Phone',    href: `tel:${D.phone}`,     display: D.phone },
@@ -946,7 +888,7 @@ function ContactSection() {
   ];
 
   return (
-    <section id="contact" className="scroll-section" style={{ background: '#f8f6f1', padding: '5rem 0' }}>
+    <section id="contact" className="scroll-section" style={{ background: th.bg, padding: '5rem 0' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1.5rem' }}>
         <div className="section-label">Contact</div>
         <h2 style={{ ...S.sectionHeading, fontSize: 'clamp(2rem, 5vw, 4rem)', lineHeight: 1.05 }}>
@@ -959,12 +901,12 @@ function ContactSection() {
             <a
               key={label}
               href={href}
-              className="bento-card"
+              className={th.card}
               {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
               style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', textDecoration: 'none', color: 'inherit' }}
             >
               <div style={{ ...S.label, fontSize: '0.62rem', color: '#c45c00' }}>{label}</div>
-              <div style={{ ...S.mono, fontSize: '0.85rem', fontWeight: 600, color: '#1a1a1a', wordBreak: 'break-all' }}>
+              <div style={{ ...S.mono, fontSize: '0.85rem', fontWeight: 600, color: th.text, wordBreak: 'break-all' }}>
                 {display}
               </div>
               <div style={{ ...S.label, fontSize: '0.62rem', color: '#c45c00', marginTop: 'auto', paddingTop: '0.5rem' }}>
@@ -1049,39 +991,23 @@ function DownloadModal({ onDownload, onClose }) {
 // ─── APP ───────────────────────────────────────────────────────────────────────
 
 export default function App() {
-  const [activeSection, setActiveSection]       = useState('hero');
+  const [active, setActive]           = useState(null);
+  const [panelKey, setPanelKey]       = useState(0);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showDownloadModal, setShowDownloadModal] = useState(false);
+  const [isMobile, setIsMobile]       = useState(() => window.innerWidth < 900);
+  const { th } = useTheme();
 
-  // Track active section via IntersectionObserver (right panel scroll root)
   useEffect(() => {
-    const rightPanel = document.querySelector('.panel-right');
-    if (!rightPanel) return;
-
-    const ids = [...NAV_SECTIONS]; // Exclude 'hero' on desktop since it's in left panel
-    const observers = ids.map(id => {
-      const el = document.getElementById(id);
-      if (!el) return null;
-      const obs = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) setActiveSection(id); },
-        { root: rightPanel, threshold: 0.3, rootMargin: '0px 0px -50% 0px' }
-      );
-      obs.observe(el);
-      return obs;
-    });
-    return () => observers.forEach(o => o?.disconnect());
+    const handler = () => setIsMobile(window.innerWidth < 900);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
   }, []);
 
-  const scrollToSection = useCallback(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const rightPanel = document.querySelector('.panel-right');
-    if (rightPanel && window.innerWidth >= 900) {
-      // Desktop: scroll right panel
-      rightPanel.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
-    } else {
-      // Mobile: normal scroll
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+  const nav = useCallback((sectionId) => {
+    setPanelKey(k => k + 1);
+    setActive(sectionId);
+    setSidebarOpen(false);
   }, []);
 
   const handleDownload = useCallback(() => {
@@ -1095,71 +1021,47 @@ export default function App() {
   }, []);
 
   return (
-    <div className="app-container">
-      {/* LEFT PANEL: Fixed hero section with orbital wheel */}
-      <div className="panel-left">
-        <ParticleCanvas width={600} height={600} />
+    <div className="app-container" style={{ background: th.bg }}>
+      <NavBar onNav={nav} onMobileMenu={() => setSidebarOpen(true)} isMobile={isMobile} th={th} />
+      <MobileSidebar open={sidebarOpen} active={active} onNav={nav} onClose={() => setSidebarOpen(false)} th={th} />
 
-        {/* Hero content */}
-        <div style={{ position: 'relative', zIndex: 5, textAlign: 'center' }}>
-          <div className="section-label" style={{ justifyContent: 'center', marginBottom: '1.5rem' }}>
-            Technical Organicist
-          </div>
-
-          <h1 style={{ ...S.serif, fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', fontWeight: 700, lineHeight: 0.95, letterSpacing: '-0.02em', margin: '0 0 1.5rem' }}>
-            Phillip
-            <br />
-            <span style={{ color: '#c45c00' }}>Asiimwe</span>
-          </h1>
-
-          {/* Orbital Wheel */}
-          <div style={{ marginBottom: '2rem' }}>
-            <OrbitalWheel
-              onSegmentClick={scrollToSection}
-              profileImage={`${import.meta.env.BASE_URL}profile.jpg`}
-            />
-          </div>
-
-          <p style={{ ...S.label, fontSize: '0.65rem', color: '#767676', marginBottom: '1.5rem' }}>
-            Click an orbit node to navigate
-          </p>
-
-          {/* CTA Button */}
-          <button
-            onClick={() => setShowDownloadModal(true)}
-            style={{
-              background: '#1a1a1a', color: '#f8f6f1', border: 'none',
-              padding: '0.5rem 1.25rem',
-              ...S.label, fontSize: '0.68rem',
-              cursor: 'pointer',
-              boxShadow: '3px 3px 0px #c45c00',
-              transition: 'transform 0.1s ease, box-shadow 0.1s ease',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translate(-1px,-1px)'; e.currentTarget.style.boxShadow = '4px 4px 0px #c45c00'; }}
-            onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '3px 3px 0px #c45c00'; }}
-          >
-            Download CV
-          </button>
+      {/* LEFT: scrollable content */}
+      <div className="left-col" style={{ background: th.panelBg }}>
+        <div key={panelKey} className="panel-enter">
+          {active === null ? (
+            <HeroIntro th={th} onDownload={() => setShowDownloadModal(true)} />
+          ) : (
+            <>
+              <button className="back-btn" onClick={() => nav(null)}>← Overview</button>
+              {active === 'expertise'  && <ExpertiseSection th={th} />}
+              {active === 'experience' && <ExperienceSection th={th} />}
+              {active === 'education'  && <EducationSection th={th} />}
+              {active === 'projects'   && <ProjectsSection th={th} />}
+              {active === 'community'  && <CommunitySection th={th} />}
+              {active === 'contact'    && <ContactSection th={th} />}
+            </>
+          )}
         </div>
       </div>
 
-      {/* RIGHT PANEL: Scrollable content */}
-      <div className="panel-right">
-        <main>
-          <ExpertiseSection />
-          <ExperienceSection />
-          <EducationSection />
-          <ProjectsSection />
-          <CommunitySection />
-          <ContactSection />
-        </main>
-        <Footer />
+      {/* RIGHT: orbital wheel */}
+      <div className="desktop-wheel" style={{
+        background: th.wheelBg,
+        borderLeft: `1px solid ${th.divider}`,
+        ...(th.lattice ? {
+          backgroundImage: 'linear-gradient(rgba(26,26,26,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(26,26,26,.04) 1px,transparent 1px)',
+          backgroundSize: '28px 28px',
+        } : {}),
+      }}>
+        <ParticleCanvas theme={th} />
+        <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <OrbitalWheel onSelect={nav} active={active} theme={th} />
+          <p style={{ ...S.label, fontSize: '0.58rem', color: th.muted, marginTop: '0.85rem' }}>
+            Click a node to explore
+          </p>
+        </div>
       </div>
 
-      {/* Theme Switcher */}
-      <ThemeSwitcher />
-
-      {/* Download Modal */}
       {showDownloadModal && (
         <DownloadModal onDownload={handleDownload} onClose={() => setShowDownloadModal(false)} />
       )}

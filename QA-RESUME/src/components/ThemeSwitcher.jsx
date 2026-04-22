@@ -1,64 +1,39 @@
 import { useTheme } from '../context/ThemeContext';
 
 export default function ThemeSwitcher() {
-  const { currentTheme, themes, switchTheme } = useTheme();
+  const { vrn, setVrn } = useTheme();
+
+  const options = [
+    { key: 'A', icon: '☀', label: 'Light Organicist' },
+    { key: 'B', icon: '●', label: 'Dark Technician' },
+  ];
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        top: '1.5rem',
-        right: '1.5rem',
-        zIndex: 100,
-        display: 'flex',
-        gap: '0.5rem',
-        backgroundColor: 'var(--surface)',
-        border: '2px solid var(--border)',
-        padding: '0.5rem',
-        boxShadow: '4px 4px 0px var(--border)',
-      }}
-      role="group"
-      aria-label="Theme switcher"
-    >
-      {Object.entries(themes).map(([key, theme]) => (
+    <div role="group" aria-label="Theme switcher" style={{ display: 'flex', gap: '0.25rem' }}>
+      {options.map(({ key, icon, label }) => (
         <button
           key={key}
-          onClick={() => switchTheme(key)}
-          title={theme.name}
-          aria-label={`Switch to ${theme.name}`}
-          aria-pressed={currentTheme === key}
+          onClick={() => setVrn(key)}
+          title={label}
+          aria-label={`Switch to ${label}`}
+          aria-pressed={vrn === key}
           style={{
-            width: '32px',
-            height: '32px',
-            border: currentTheme === key ? '3px solid var(--accent)' : '2px solid var(--border)',
-            background: theme['--surface'],
+            width: 32,
+            height: 32,
+            border: vrn === key ? '2px solid var(--accent)' : '1.5px solid var(--border)',
+            background: vrn === key ? 'var(--accent)' : 'transparent',
+            color: vrn === key ? '#fff' : 'var(--brand)',
+            borderRadius: 6,
             cursor: 'pointer',
-            fontSize: '0.7rem',
-            fontWeight: 700,
-            color: theme['--brand'],
-            transition: 'all 0.15s ease',
+            fontSize: '0.9rem',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            borderRadius: '4px',
+            transition: 'all 0.15s',
             outline: 'none',
           }}
-          onMouseEnter={(e) => {
-            if (currentTheme !== key) {
-              e.currentTarget.style.transform = 'scale(1.1)';
-            }
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = '';
-          }}
-          onFocus={(e) => {
-            e.currentTarget.style.boxShadow = '0 0 0 2px var(--accent)';
-          }}
-          onBlur={(e) => {
-            e.currentTarget.style.boxShadow = '';
-          }}
         >
-          {theme.label}
+          {icon}
         </button>
       ))}
     </div>

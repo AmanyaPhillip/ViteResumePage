@@ -1,0 +1,583 @@
+@import "tailwindcss";
+
+/* ─── Design Tokens ────────────────────────────────────────────────────────── */
+:root {
+  --accent:      #c45c00;
+  --accent-warm: #ff6b35;
+  --brand:       #1a1a1a;
+  --surface:     #f8f6f1;
+  --surface-alt: #f0ede6;
+  --surface-dark:#222222;
+  --muted:       #767676;
+  --border:      #1a1a1a;
+  --forest:      #1a5c3a;
+  --font-serif:  'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-sans:   'DM Sans', system-ui, -apple-system, sans-serif;
+}
+
+/* ─── Base Reset ────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--surface);
+  color: var(--brand);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ─── Animations ────────────────────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes panelIn {
+  from { opacity: 0; transform: translateX(-28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.panel-enter { animation: panelIn 0.38s cubic-bezier(0.16,1,0.3,1) both; }
+
+/* ─── CS Lattice Background ─────────────────────────────────────────────────── */
+.lattice-bg {
+  background-color: var(--surface);
+  background-image:
+    linear-gradient(rgba(26,26,26,0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26,26,26,0.055) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* ─── Bento Card ────────────────────────────────────────────────────────────── */
+.bento-card {
+  background: #fff;
+  border: 2px solid var(--border);
+  box-shadow: 4px 4px 0px var(--border);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.bento-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--border);
+}
+
+.bento-card-dark {
+  background: var(--surface-dark);
+  border: 2px solid #333;
+  box-shadow: 4px 4px 0px var(--accent);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.bento-card-dark:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--accent);
+}
+
+/* ─── Theme-variant Card Classes ────────────────────────────────────────────── */
+.card-a {
+  background: #fff;
+  border: 2px solid #1a1a1a;
+  box-shadow: 4px 4px 0 #c45c00;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.card-a:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 #c45c00; }
+
+.card-b {
+  background: #1c1c1c;
+  border: 1px solid #2a2a2a;
+  box-shadow: 4px 4px 0 #e06a1a;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.card-b:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 #e06a1a; }
+
+.card-c {
+  background: #fff;
+  border: 1px solid #e4e0d8;
+  box-shadow: 0 2px 18px rgba(0,0,0,0.055);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.card-c:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.09); }
+
+.tag-a { border: 1.5px solid #444; padding: 0.25rem 0.65rem; font-family: var(--font-sans); font-size: 0.75rem; font-weight: 500; color: #ccc; }
+.tag-b { border: 1.5px solid #555; padding: 0.25rem 0.65rem; font-family: var(--font-sans); font-size: 0.75rem; font-weight: 500; color: #aaa; }
+.tag-c { border: 1.5px solid rgba(26,26,26,0.2); padding: 0.25rem 0.65rem; font-family: var(--font-sans); font-size: 0.75rem; font-weight: 500; color: #666; }
+
+/* ─── Profile Photo ─────────────────────────────────────────────────────────── */
+.profile-photo {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 3px solid var(--brand);
+  overflow: hidden;
+  background: var(--brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 5px 5px 0px var(--accent);
+}
+
+.profile-photo .initials {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--surface);
+  position: relative;
+  z-index: 1;
+  user-select: none;
+}
+
+/* ─── Section Label ─────────────────────────────────────────────────────────── */
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.section-label::before {
+  content: '';
+  display: block;
+  width: 1.75rem;
+  height: 2px;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+.section-label.light { color: var(--accent); }
+
+/* ─── Skill Tag ─────────────────────────────────────────────────────────────── */
+.skill-tag {
+  border: 1.5px solid #444;
+  padding: 0.25rem 0.65rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #ccc;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.skill-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ─── Contact Link ──────────────────────────────────────────────────────────── */
+.contact-link {
+  border: 2px solid var(--brand);
+  padding: 0.4rem 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--brand);
+  transition: background 0.15s ease, color 0.15s ease;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.contact-link:hover {
+  background: var(--brand);
+  color: var(--surface);
+}
+
+/* ─── Timeline ──────────────────────────────────────────────────────────────── */
+.timeline-container {
+  position: relative;
+  padding-left: 2.75rem;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 9px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: var(--border);
+  transform-origin: top center;
+  transform: scaleY(0);
+}
+
+.timeline-line.animated {
+  animation: timelineGrow 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline-line.animated {
+    animation: none;
+    transform: scaleY(1);
+  }
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -2.35rem;
+  top: 0.45rem;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 3px solid var(--surface);
+  outline: 2px solid var(--border);
+}
+
+/* ─── Print ─────────────────────────────────────────────────────────────────── */
+@media print {
+  nav, footer, .side-nav, button { display: none !important; }
+  body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}
+
+/* ─── Project Card (clickable variant) ──────────────────────────────────────── */
+/*
+ * .project-card-clickable wraps the existing .bento-card pattern and adds
+ * a cursor + a subtle "lift" on hover to signal interactivity.
+ * We also add a small arrow indicator in the bottom-right corner.
+ */
+.project-card-clickable {
+  cursor: pointer;
+  position: relative;
+  /* inherits .bento-card border/shadow via class composition in JSX */
+}
+
+.project-card-clickable::after {
+  content: '↗';
+  position: absolute;
+  bottom: 0.85rem;
+  right: 1rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  color: var(--muted);
+  opacity: 0;
+  transform: translate(2px, 2px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  pointer-events: none;
+}
+
+.project-card-clickable:hover::after {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* ─── Project Modal ──────────────────────────────────────────────────────────── */
+/*
+ * Uses the native <dialog> element which sits on the browser's top-layer,
+ * bypassing all z-index stacking contexts automatically.
+ * The ::backdrop pseudo-element handles the dimmed overlay.
+ */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeInBackdrop {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes timelineGrow {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+/* Dialog backdrop — scrim behind the modal.
+ * Matches ExperienceModal: plain dark overlay, no blur, so the card is
+ * the sole visual focus (same rgba(0,0,0,0.5) value). */
+.project-modal::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  animation: fadeInBackdrop 0.3s ease-out forwards;
+}
+
+/* The dialog box itself */
+.project-modal {
+  /* Reset browser dialog defaults */
+  border: none;
+  padding: 0;
+  margin: auto; /* centres in the viewport */
+  background: transparent;
+
+  /* Sizing — max-height keeps very long statements scrollable */
+  width: min(760px, 92vw);
+  max-height: 88vh;
+
+  /* Animation — 400ms matches ExperienceModal's spring duration for the
+   * same physical, weighted feel on open. */
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Inner content card */
+.project-modal-inner {
+  background: var(--surface);         /* #f8f6f1 — matches the site's card bg   */
+  border: 2px solid var(--brand);     /* 2px border, matches bento-card design   */
+  box-shadow: 6px 6px 0px var(--brand); /* offset shadow, matches design DNA      */
+  border-radius: 0;                   /* sharp corners — no rounding             */
+  display: flex;
+  flex-direction: column;
+  max-height: 88vh;                   /* keeps overflow scroll working           */
+  overflow: hidden;
+}
+
+/* Scrollable body region */
+.project-modal-body {
+  overflow-y: auto;
+  padding: 2rem 2.5rem 2.5rem;
+  /* Custom scrollbar to match the dark theme */
+  scrollbar-width: thin;
+  scrollbar-color: var(--brand) var(--surface-alt);
+}
+
+.project-modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+.project-modal-body::-webkit-scrollbar-track {
+  background: var(--surface-alt);
+}
+.project-modal-body::-webkit-scrollbar-thumb {
+  background: var(--brand);
+}
+
+/* Sticky header strip inside the modal */
+.project-modal-header {
+  padding: 1.5rem 2.5rem 1.25rem;
+  border-bottom: 2px solid var(--brand);
+  background: var(--surface);          /* stays visible while body scrolls      */
+  flex-shrink: 0;
+}
+
+/* Close button — ghost style matching ExperienceModal: no border, opacity
+ * fade on hover, so the ✕ chrome doesn't compete with the content. */
+.project-modal-close {
+  background: none;
+  border: none;
+  color: var(--brand);
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 1.5rem;
+  font-weight: 400;
+  flex-shrink: 0;
+  opacity: 0.6;
+  padding: 0;
+  transition: opacity 0.2s ease;
+}
+
+.project-modal-close:hover {
+  opacity: 1;
+}
+
+/* Status badge colour variants used in the modal */
+.status-badge-live {
+  background: var(--forest);   /* #1a5c3a */
+  color: #f8f6f1;
+}
+
+.status-badge-portfolio {
+  background: var(--accent);   /* #c45c00 — orange */
+  color: #fff;
+}
+
+.status-badge-initiative {
+  background: #4a2d6b;         /* purple */
+  color: #f8f6f1;
+}
+
+/* ─── Mobile: full-screen modal ─────────────────────────────────────────────── */
+@media (max-width: 899px) {
+  .project-modal {
+    width: 100vw;
+    max-height: 100dvh;   /* dynamic viewport height handles mobile browser bars */
+    margin: 0;
+    /* pin to bottom edge so it slides up from the bottom of the screen */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+  }
+
+  .project-modal-inner {
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    box-shadow: 0 -4px 0px var(--brand);
+    max-height: 100dvh;
+    border-radius: 0;
+  }
+
+  .project-modal-header,
+  .project-modal-body {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+
+/* ─── TWO-PANEL LAYOUT ─────────────────────────────────────────────────────────── */
+
+/*
+ * Layout split custom properties — cycled by the LayoutToggle button in the navbar.
+ * Values: 50/50 (default) | 60/40 | 70/30
+ * Smooth resize is handled by the transition on .app-container.
+ */
+:root {
+  --left-col-width:  50%;
+  --right-col-width: 50%;
+}
+
+body { overflow: hidden; }
+
+#root { display: flex; height: 100vh; width: 100vw; }
+
+.app-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  padding-top: 60px;
+  /* Smooth width transition when toggling layout splits */
+  transition: background 0.4s;
+}
+
+/* LEFT: scrollable content panel */
+.left-col {
+  width: var(--left-col-width);
+  height: 100%;
+  overflow-y: auto;
+  padding: clamp(1.5rem, 3vw, 3.5rem) clamp(1rem, 3vw, 3rem) clamp(1.5rem, 3.5vw, 3rem) clamp(1.25rem, 3.5vw, 4rem);
+  background: var(--surface);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.4s;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(196,92,0,0.25) transparent;
+}
+.left-col::-webkit-scrollbar { width: 3px; }
+.left-col::-webkit-scrollbar-track { background: transparent; }
+.left-col::-webkit-scrollbar-thumb { background: rgba(196,92,0,0.25); border-radius: 2px; }
+
+/* RIGHT: orbital wheel panel */
+.desktop-wheel {
+  width: var(--right-col-width);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  border-left: 1px solid var(--muted);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.4s;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ─── NAVBAR ─────────────────────────────────────────────────────────────────── */
+.site-navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 60px;
+  backdrop-filter: blur(18px);
+  display: flex; align-items: center;
+}
+.site-navbar-inner {
+  max-width: 1500px; margin: 0 auto; padding: 0 1.5rem; width: 100%;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+/* ─── PHILLIP PILL ───────────────────────────────────────────────────────────── */
+.phillip-pill {
+  background: transparent;
+  border: 1.5px solid rgba(26,26,26,0.18);
+  border-radius: 24px;
+  padding: 0.32rem 1rem;
+  text-align: left; cursor: pointer;
+  transition: background 0.18s, border-color 0.18s;
+}
+.phillip-pill:hover { background: var(--brand); border-color: var(--brand); }
+.phillip-pill:hover .pill-name { color: var(--surface); }
+.pill-name {
+  font-size: 1rem; line-height: 1.2; font-weight: 700; color: var(--brand);
+  transition: color 0.18s; display: block;
+}
+
+/* ─── BACK BUTTON ────────────────────────────────────────────────────────────── */
+.back-btn {
+  background: none; border: none; cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); display: flex; align-items: center;
+  gap: 0.4rem; margin-bottom: 1.5rem; padding: 0;
+  transition: color 0.15s;
+}
+.back-btn:hover { color: var(--accent); }
+
+/* ─── MOBILE SIDEBAR ─────────────────────────────────────────────────────────── */
+.mobile-sidebar-backdrop {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.45); z-index: 190;
+  transition: opacity 0.3s;
+}
+.mobile-sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0; width: 220px;
+  z-index: 200;
+  padding: 4.5rem 1.25rem 2rem;
+  display: flex; flex-direction: column; gap: 0.5rem;
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+  overflow-y: auto;
+}
+.mobile-sidebar.open { transform: translateX(0); }
+
+/* ─── SIDEBAR NAV BUTTONS ────────────────────────────────────────────────────── */
+.sidebar-nav-btn {
+  background: transparent; border: 1.5px solid var(--muted);
+  color: var(--muted); padding: 0.22rem 0.65rem;
+  font-family: var(--font-sans); font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  white-space: nowrap; cursor: pointer; transition: all 0.15s;
+  text-align: left; width: 100%;
+}
+.sidebar-nav-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.sidebar-nav-btn:not(.active):hover { border-color: var(--brand); color: var(--brand); }
+
+/* ─── MOBILE (<900px) ────────────────────────────────────────────────────────── */
+@media (max-width: 899px) {
+  .desktop-wheel { display: none !important; }
+  .app-container { flex-direction: column; height: auto; overflow: visible; }
+  .left-col { width: 100%; height: auto; overflow-y: visible; }
+  body { overflow: auto; }
+  #root { display: block; height: auto; }
+  .mobile-sidebar-backdrop { display: block; }
+  h1 { font-size: clamp(1.75rem, 5vw, 2.5rem) !important; }
+  h2 { font-size: clamp(1.5rem, 4vw, 2rem) !important; }
+  h3 { font-size: clamp(1.1rem, 3vw, 1.5rem) !important; }
+  section { padding: 3rem 1rem !important; }
+  .bento-card { padding: 1.25rem !important; }
+}

@@ -1,8 +1,10 @@
-import { useState, useEffect, useCallback, memo } from 'react';
+import { useState, useEffect, useCallback, memo, useRef } from 'react';
 import OrbitalWheel from './components/OrbitalWheel';
 import ParticleCanvas from './components/ParticleCanvas';
 import ThemeSwitcher from './components/ThemeSwitcher';
 import ProjectModal from './components/ProjectModal';
+import ExperienceCard from './components/ExperienceCard';
+import ExperienceModal from './components/ExperienceModal';
 import { useTheme } from './context/ThemeContext';
 import './App.css';
 
@@ -175,7 +177,7 @@ const D = {
     // ── PORTFOLIO: academic & experimental ────────────────────────────────────
     {
       title:       'LUXO Place Resident App',
-      status:      'PORTFOLIO',
+      status:      'LIVE',
       stack:       ['Flutter', 'Provider', 'Calendly'],
       description: 'Unified resident app for a luxury complex — maintenance, access, community, and amenity booking.',
       personalStatement: `I built this app out of personal frustration: every time I went to my building's service page, I had to repeatedly fill in my name, number, and apartment details—information that never changes. I started by automating that process and adding a feature to save a detailed record of each submitted request, rather than just receiving a basic acknowledgment.\n\nFrom there, the project naturally expanded. I wanted my lease handy to easily review terms, and I realized there was a completely separate app just for letting guests and delivery drivers into the building. I created a unified concept to handle access, avoiding the need for multiple disjointed apps.\n\nThe real turning point came when a neighbor mentioned they were moving out because the building felt like it was missing something. I realized this place needed a community. People needed a way to tell a neighbor they left their car lights on in the basement to save them from a dead battery. So, I added community features: a lost-and-found feed, a dog-lovers group, and amenities booking.\n\nBefore I knew it, I had built a comprehensive apartment management app. My ultimate goal is for my building's management to issue it to all residents, so we can have the collective power that comes with a group of individuals living through the same experience.`,
@@ -278,9 +280,115 @@ const SIDEBAR_SECTIONS = [
   { id: 'education',  label: 'Education'  },
 ];
 
+// ─── LAYOUT SPLIT HOOK ─────────────────────────────────────────────────────────
+
+const SPLIT_OPTIONS = ['50/50', '60/40', '70/30'];
+
+const SPLIT_VARS = {
+  '50/50': { left: '50%',  right: '50%' },
+  '60/40': { left: '60%',  right: '40%' },
+  '70/30': { left: '70%',  right: '30%' },
+};
+
+const LS_KEY = 'layoutSplit';
+
+function useLayoutSplit() {
+  const [split, setSplitState] = useState(() => {
+    try {
+      const stored = localStorage.getItem(LS_KEY);
+      return SPLIT_OPTIONS.includes(stored) ? stored : '50/50';
+    } catch {
+      return '50/50';
+    }
+  });
+
+  // Apply CSS custom properties to :root whenever split changes
+  useEffect(() => {
+    const vars = SPLIT_VARS[split];
+    document.documentElement.style.setProperty('--left-col-width',  vars.left);
+    document.documentElement.style.setProperty('--right-col-width', vars.right);
+    try { localStorage.setItem(LS_KEY, split); } catch { /* storage unavailable */ }
+  }, [split]);
+
+  // Sync across browser tabs
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.key === LS_KEY && SPLIT_OPTIONS.includes(e.newValue)) {
+        setSplitState(e.newValue);
+      }
+    };
+    window.addEventListener('storage', handler);
+    return () => window.removeEventListener('storage', handler);
+  }, []);
+
+  const cycleSplit = useCallback(() => {
+    setSplitState(prev => {
+      const idx = SPLIT_OPTIONS.indexOf(prev);
+      return SPLIT_OPTIONS[(idx + 1) % SPLIT_OPTIONS.length];
+    });
+  }, []);
+
+  return { split, cycleSplit };
+}
+
+// ─── LAYOUT TOGGLE BUTTON ──────────────────────────────────────────────────────
+
+function LayoutToggle({ split, onCycle, th }) {
+  return (
+    <button
+      onClick={onCycle}
+      title="Cycle layout split"
+      aria-label={`Current layout: ${split}. Click to change.`}
+      style={{
+        background: 'transparent',
+        border: '1.5px solid rgba(26,26,26,0.18)',
+        borderRadius: 24,
+        cursor: 'pointer',
+        padding: '.32rem 1rem',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '.45rem',
+        transition: 'background .18s, border-color .18s',
+        flexShrink: 0,
+        outline: 'none',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.background = th.text;
+        e.currentTarget.style.borderColor = th.text;
+        const label = e.currentTarget.querySelector('[data-label]');
+        if (label) label.style.color = th.bg;
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.background = 'transparent';
+        e.currentTarget.style.borderColor = 'rgba(26,26,26,0.18)';
+        const label = e.currentTarget.querySelector('[data-label]');
+        if (label) label.style.color = th.text;
+      }}
+    >
+      <span style={{ fontSize: '0.85rem', lineHeight: 1, display: 'block' }}>⊞</span>
+      <div
+        data-label
+        style={{
+          fontFamily: "'DM Sans', system-ui, sans-serif",
+          fontSize: '.62rem',
+          fontWeight: 700,
+          letterSpacing: '.14em',
+          textTransform: 'uppercase',
+          color: th.text,
+          transition: 'color .18s',
+          minWidth: '2.5rem',
+          textAlign: 'center',
+        }}
+      >
+        {split}
+      </div>
+    </button>
+  );
+}
+
 // ─── NAVBAR ────────────────────────────────────────────────────────────────────
 
-function NavBar({ onNav, onMobileMenu, isMobile, th }) {
+function NavBar({ onNav, onMobileMenu, isMobile, th, split, onCycleSplit }) {
   return (
     <nav className="site-navbar" style={{ background: th.navBg, borderBottom: `1px solid ${th.navBorder}` }}>
       <div className="site-navbar-inner">
@@ -293,7 +401,10 @@ function NavBar({ onNav, onMobileMenu, isMobile, th }) {
             Phillip Asiimwe
           </span>
         </button>
-        <ThemeSwitcher />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          {!isMobile && <LayoutToggle split={split} onCycle={onCycleSplit} th={th} />}
+          <ThemeSwitcher th={th} />
+        </div>
       </div>
     </nav>
   );
@@ -455,8 +566,29 @@ function ExpertiseSection() {
 // ─── EXPERIENCE ────────────────────────────────────────────────────────────────
 
 function ExperienceSection({ th }) {
+  const [openIndex, setOpenIndex] = useState(null);
+  const sectionRef = useRef(null);
+  const timelineLineRef = useRef(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    const timelineLine = timelineLineRef.current;
+    if (!section || !timelineLine) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        timelineLine.classList.add('animated');
+        observer.disconnect();
+      }
+    }, { threshold: 0.15 });
+
+    observer.observe(section);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="experience" style={{ padding: '3rem 0' }}>
+    <section id="experience" ref={sectionRef} style={{ padding: '3rem 0' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1.5rem' }}>
         <div className="section-label">Experience</div>
         <h2 style={{ ...S.sectionHeading, fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}>
@@ -464,55 +596,28 @@ function ExperienceSection({ th }) {
         </h2>
 
         <div className="timeline-container">
-          <div className="timeline-line" />
+          <div className="timeline-line" ref={timelineLineRef} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
             {D.experience.map((job, i) => (
-              <div key={i} style={{ position: 'relative' }}>
-                {/* Timeline dot */}
-                <div
-                  className="timeline-dot"
-                  style={{ background: i === 0 ? th.accent : th.text }}
-                />
-
-                <div className={th.card} style={{ padding: '2rem' }}>
-                  {/* Header */}
-                  <div style={{
-                    display: 'flex', justifyContent: 'space-between',
-                    alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1.5rem',
-                  }}>
-                    <div>
-                      <h3 style={{ ...S.serif, fontSize: '1.35rem', fontWeight: 700, margin: '0 0 0.3rem' }}>
-                        {job.role}
-                      </h3>
-                      <div style={{ ...S.mono, fontSize: '0.85rem', color: th.accent, fontWeight: 700 }}>
-                        {job.company} · {job.location}
-                      </div>
-                    </div>
-                    <span style={{
-                      border: `2px solid ${th.text}`, padding: '0.25rem 0.75rem',
-                      ...S.label, fontSize: '0.65rem', whiteSpace: 'nowrap',
-                    }}>
-                      {job.period}
-                    </span>
-                  </div>
-
-                  {/* Points */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.7rem' }}>
-                    {job.points.map((p, j) => (
-                      <div key={j} style={{ display: 'flex', gap: '0.65rem', alignItems: 'flex-start' }}>
-                        <span style={{ color: '#c45c00', fontSize: '0.6rem', marginTop: '0.5rem', flexShrink: 0 }}>▸</span>
-                        <p style={{ ...S.mono, fontSize: '0.865rem', lineHeight: 1.7, margin: 0, color: th.text }}>
-                          <strong style={{ fontWeight: 700 }}>{p.label}:</strong> {p.text}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              <ExperienceCard
+                key={i}
+                job={job}
+                index={i}
+                th={th}
+                onClick={() => setOpenIndex(i)}
+              />
             ))}
           </div>
         </div>
       </div>
+
+      {openIndex !== null && (
+        <ExperienceModal
+          job={D.experience[openIndex]}
+          th={th}
+          onClose={() => setOpenIndex(null)}
+        />
+      )}
     </section>
   );
 }
@@ -806,6 +911,7 @@ function ProjectsSection({ th }) {
         project={selectedProject}
         isOpen={modalOpen}
         onClose={closeModal}
+        th={th}
       />
     </section>
   );
@@ -997,6 +1103,7 @@ export default function App() {
   const [showDownloadModal, setShowDownloadModal] = useState(false);
   const [isMobile, setIsMobile]       = useState(() => window.innerWidth < 900);
   const { th } = useTheme();
+  const { split, cycleSplit } = useLayoutSplit();
 
   useEffect(() => {
     const handler = () => setIsMobile(window.innerWidth < 900);
@@ -1005,8 +1112,11 @@ export default function App() {
   }, []);
 
   const nav = useCallback((sectionId) => {
+    setActive(prev => {
+      const next = prev === sectionId ? null : sectionId;
+      return next;
+    });
     setPanelKey(k => k + 1);
-    setActive(sectionId);
     setSidebarOpen(false);
   }, []);
 
@@ -1022,7 +1132,7 @@ export default function App() {
 
   return (
     <div className="app-container" style={{ background: th.bg }}>
-      <NavBar onNav={nav} onMobileMenu={() => setSidebarOpen(true)} isMobile={isMobile} th={th} />
+      <NavBar onNav={nav} onMobileMenu={() => setSidebarOpen(true)} isMobile={isMobile} th={th} split={split} onCycleSplit={cycleSplit} />
       <MobileSidebar open={sidebarOpen} active={active} onNav={nav} onClose={() => setSidebarOpen(false)} th={th} />
 
       {/* LEFT: scrollable content */}
@@ -1053,7 +1163,7 @@ export default function App() {
           backgroundSize: '28px 28px',
         } : {}),
       }}>
-        <ParticleCanvas theme={th} />
+        <ParticleCanvas />
         <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <OrbitalWheel onSelect={nav} active={active} theme={th} />
           <p style={{ ...S.label, fontSize: '0.58rem', color: th.muted, marginTop: '0.85rem' }}>

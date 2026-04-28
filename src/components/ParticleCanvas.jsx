@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react';
+import { useTheme } from '../context/ThemeContext';
 
-export default function ParticleCanvas({ theme, width = 600, height = 600 }) {
+export default function ParticleCanvas() {
+  const { vrn } = useTheme();
   const canvasRef = useRef(null);
-  const particlesRef = useRef([]);
-  const animationIdRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -11,99 +11,102 @@ export default function ParticleCanvas({ theme, width = 600, height = 600 }) {
 
     // Detect if on mobile
     const isMobile = window.innerWidth < 900;
-    if (isMobile) return; // Don't render on mobile
+    if (isMobile) return;
 
     const ctx = canvas.getContext('2d');
-    const particleCount = 45;
-    const maxVelocity = 0.5;
+    let w = canvas.offsetWidth;
+    let h = canvas.offsetHeight;
+    canvas.width = w;
+    canvas.height = h;
 
-    // Initialize particles
-    const initParticles = () => {
-      const particles = [];
-      for (let i = 0; i < particleCount; i++) {
-        particles.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          vx: (Math.random() - 0.5) * maxVelocity,
-          vy: (Math.random() - 0.5) * maxVelocity,
-          radius: Math.random() * 2 + 1,
-        });
-      }
-      particlesRef.current = particles;
-    };
+    const N = 120;
+    const pts = Array.from({ length: N }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      vx: (Math.random() - 0.5) * 0.65,
+      vy: (Math.random() - 0.5) * 0.65,
+      r: Math.random() * 1.8 + 0.6,
+    }));
 
-    const accentColor = theme?.accent || '#c45c00';
+    const dark = vrn === 'B';
+    const dotColor = dark
+      ? 'rgba(224,106,26,0.32)'
+      : 'rgba(196,92,0,0.28)';
+    const lineBase = dark ? '255,255,255' : '26,26,26';
+    let raf;
 
-    // Animation loop
-    const animate = () => {
-      ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--surface').trim();
-      ctx.fillRect(0, 0, width, height);
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
 
-      // Update and draw particles
-      particlesRef.current.forEach((p) => {
-        // Update position
+      // Update positions
+      for (const p of pts) {
         p.x += p.vx;
         p.y += p.vy;
+        if (p.x < 0 || p.x > w) {
+          p.vx *= -1;
+          p.x = Math.max(0, Math.min(w, p.x));
+        }
+        if (p.y < 0 || p.y > h) {
+          p.vy *= -1;
+          p.y = Math.max(0, Math.min(h, p.y));
+        }
+      }
 
-        // Bounce off edges
-        if (p.x - p.radius <= 0 || p.x + p.radius >= width) p.vx *= -1;
-        if (p.y - p.radius <= 0 || p.y + p.radius >= height) p.vy *= -1;
-
-        // Keep in bounds (safety clamp)
-        p.x = Math.max(p.radius, Math.min(width - p.radius, p.x));
-        p.y = Math.max(p.radius, Math.min(height - p.radius, p.y));
-
-        // Draw particle
-        ctx.fillStyle = accentColor;
-        ctx.globalAlpha = 0.6;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Draw connection lines to nearby particles
-        ctx.globalAlpha = 0.15;
-        ctx.strokeStyle = accentColor;
-        ctx.lineWidth = 0.5;
-        particlesRef.current.forEach((p2) => {
-          const dx = p.x - p2.x;
-          const dy = p.y - p2.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          if (distance < 100 && distance > 0) {
+      // Draw lines first
+      for (let i = 0; i < N; i++) {
+        for (let j = i + 1; j < N; j++) {
+          const dx = pts[i].x - pts[j].x;
+          const dy = pts[i].y - pts[j].y;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if (d < 100) {
             ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(p2.x, p2.y);
+            ctx.moveTo(pts[i].x, pts[i].y);
+            ctx.lineTo(pts[j].x, pts[j].y);
+            ctx.strokeStyle = `rgba(${lineBase},${0.07 * (1 - d / 100)})`;
+            ctx.lineWidth = 0.7;
             ctx.stroke();
           }
-        });
-      });
+        }
+      }
 
-      ctx.globalAlpha = 1;
-      animationIdRef.current = requestAnimationFrame(animate);
-    };
+      // Draw particles
+      for (const p of pts) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = dotColor;
+        ctx.fill();
+      }
 
-    initParticles();
-    animate();
+      raf = requestAnimationFrame(draw);
+    }
+
+    draw();
+
+    // Handle resize
+    const ro = new ResizeObserver(() => {
+      w = canvas.offsetWidth;
+      h = canvas.offsetHeight;
+      canvas.width = w;
+      canvas.height = h;
+    });
+    ro.observe(canvas);
 
     return () => {
-      if (animationIdRef.current) {
-        cancelAnimationFrame(animationIdRef.current);
-      }
+      cancelAnimationFrame(raf);
+      ro.disconnect();
     };
-  }, [width, height, theme]);
+  }, [vrn]);
 
   return (
     <canvas
       ref={canvasRef}
-      width={width}
-      height={height}
       style={{
-        display: 'block',
         position: 'absolute',
-        top: 0,
-        left: 0,
+        inset: 0,
         width: '100%',
         height: '100%',
-        zIndex: -1,
+        pointerEvents: 'none',
+        zIndex: 0,
       }}
     />
   );

@@ -34,15 +34,15 @@ function StatusBadge({ status }) {
 }
 
 // ─── Stack tag ────────────────────────────────────────────────────────────────
-function StackTag({ tech }) {
+function StackTag({ tech, th }) {
   return (
     <span style={{
-      border: '1.5px solid var(--muted)',
+      border: `1.5px solid ${th?.muted}`,
       padding: '0.2rem 0.6rem',
       ...label, fontSize: '0.62rem',
-      color: 'var(--muted)',
+      color: th?.muted,
       fontWeight: 600,
-      background: 'var(--surface-alt)',
+      background: th?.panelBg,
     }}>
       {tech}
     </span>
@@ -55,6 +55,7 @@ function StackTag({ tech }) {
  *   project  — the project object from D.projects (may be null when closed)
  *   isOpen   — boolean controlling open state
  *   onClose  — () => void
+ *   th       — theme object with colors (bg, text, accent, muted, etc.)
  *
  * Technique:
  *   Uses a native <dialog> element, which the browser places on its top-layer.
@@ -66,7 +67,7 @@ function StackTag({ tech }) {
  *   leveraging the browser's built-in dialog accessibility (focus trap, Escape
  *   key, ::backdrop pseudo-element).
  */
-export default function ProjectModal({ project, isOpen, onClose }) {
+export default function ProjectModal({ project, isOpen, onClose, th }) {
   const dialogRef = useRef(null);
 
   // Open / close the native dialog imperatively when isOpen changes
@@ -114,10 +115,17 @@ export default function ProjectModal({ project, isOpen, onClose }) {
       aria-modal="true"
     >
       {/* Inner card — click here does NOT bubble to the backdrop handler */}
-      <div className="project-modal-inner" onClick={e => e.stopPropagation()}>
+      <div className="project-modal-inner" style={{
+        background: th?.bg,
+        border: `2px solid ${th?.text}`,
+        boxShadow: `6px 6px 0px ${th?.text}`,
+      }} onClick={e => e.stopPropagation()}>
 
         {/* ── Sticky header ── */}
-        <div className="project-modal-header">
+        <div className="project-modal-header" style={{
+          background: th?.bg,
+          borderBottomColor: th?.text,
+        }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem' }}>
 
             {/* Left: title + status + stack */}
@@ -132,7 +140,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                 lineHeight: 1.1,
                 margin: '0.55rem 0 0.9rem',
                 letterSpacing: '-0.01em',
-                color: 'var(--brand)',
+                color: th?.text,
               }}>
                 {project?.title}
               </h2>
@@ -141,7 +149,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
               {project?.stack && (
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
                   {project.stack.map(tech => (
-                    <StackTag key={tech} tech={tech} />
+                    <StackTag key={tech} tech={tech} th={th} />
                   ))}
                 </div>
               )}
@@ -149,9 +157,25 @@ export default function ProjectModal({ project, isOpen, onClose }) {
 
             {/* Right: close button */}
             <button
-              className="project-modal-close"
               onClick={onClose}
               aria-label="Close project details"
+              style={{
+                background: 'none',
+                border: 'none',
+                color: th?.text,
+                width: '2rem',
+                height: '2rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                fontSize: '1.5rem',
+                opacity: 0.6,
+                transition: 'opacity 0.2s ease',
+                padding: 0,
+              }}
+              onMouseEnter={(e) => { e.target.style.opacity = '1'; }}
+              onMouseLeave={(e) => { e.target.style.opacity = '0.6'; }}
             >
               ✕
             </button>
@@ -159,7 +183,10 @@ export default function ProjectModal({ project, isOpen, onClose }) {
         </div>
 
         {/* ── Scrollable body ── */}
-        <div className="project-modal-body">
+        <div className="project-modal-body" style={{
+          background: th?.bg,
+          color: th?.text,
+        }}>
 
           {/* Short description (teaser) — acts as a lead-in to the personal statement */}
           {project?.description && (
@@ -167,11 +194,11 @@ export default function ProjectModal({ project, isOpen, onClose }) {
               ...mono,
               fontSize: '0.9rem',
               lineHeight: 1.7,
-              color: 'var(--muted)',
+              color: th?.muted,
               fontStyle: 'italic',
               margin: '0 0 1.75rem',
               paddingBottom: '1.5rem',
-              borderBottom: '1.5px solid var(--muted)',
+              borderBottom: `1.5px solid ${th?.muted}`,
             }}>
               {project.description}
             </p>
@@ -180,7 +207,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
           {/* Personal Statement — full narrative, shown only when it exists */}
           {project?.personalStatement ? (
             <div>
-              <div style={{ ...label, fontSize: '0.6rem', color: 'var(--accent)', marginBottom: '0.85rem' }}>
+              <div style={{ ...label, fontSize: '0.6rem', color: th?.accent, marginBottom: '0.85rem' }}>
                 Personal Statement
               </div>
               {/*
@@ -192,7 +219,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                   ...mono,
                   fontSize: '0.92rem',
                   lineHeight: 1.85,
-                  color: 'var(--brand)',
+                  color: th?.text,
                   margin: i === 0 ? '0 0 1rem' : '0 0 1rem',
                 }}>
                   {para.trim()}
@@ -203,14 +230,14 @@ export default function ProjectModal({ project, isOpen, onClose }) {
             /* Fallback for projects without a personalStatement */
             project?.bullets && project.bullets.length > 0 && (
               <div>
-                <div style={{ ...label, fontSize: '0.6rem', color: 'var(--accent)', marginBottom: '0.85rem' }}>
+                <div style={{ ...label, fontSize: '0.6rem', color: th?.accent, marginBottom: '0.85rem' }}>
                   Highlights
                 </div>
                 <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
                   {project.bullets.map((b, i) => (
                     <li key={i} style={{ display: 'flex', gap: '0.6rem', alignItems: 'flex-start' }}>
-                      <span style={{ color: 'var(--accent)', fontSize: '0.6rem', marginTop: '0.45rem', flexShrink: 0 }}>▸</span>
-                      <span style={{ ...mono, fontSize: '0.88rem', lineHeight: 1.65, color: 'var(--muted)' }}>{b}</span>
+                      <span style={{ color: th?.accent, fontSize: '0.6rem', marginTop: '0.45rem', flexShrink: 0 }}>▸</span>
+                      <span style={{ ...mono, fontSize: '0.88rem', lineHeight: 1.65, color: th?.muted }}>{b}</span>
                     </li>
                   ))}
                 </ul>
@@ -228,9 +255,9 @@ export default function ProjectModal({ project, isOpen, onClose }) {
                 display: 'inline-block',
                 marginTop: '1.75rem',
                 ...label, fontSize: '0.65rem',
-                color: 'var(--brand)',
+                color: th?.text,
                 textDecoration: 'none',
-                borderBottom: '2px solid var(--brand)',
+                borderBottom: `2px solid ${th?.text}`,
                 paddingBottom: '1px',
               }}
             >
